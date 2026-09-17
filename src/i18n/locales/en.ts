@@ -53,5 +53,8 @@ export const authEn = {
   },
   forgotPassword: 'Forgot password?',
   signIn: 'Sign in',
+  signingIn: 'Signing in...',
+  signInError:
+    'We could not sign you in. Check your email, password and connection, then try again.',
   helper: 'Secure access for employees.',
 } as const;

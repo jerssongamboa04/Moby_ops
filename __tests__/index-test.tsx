@@ -2,14 +2,29 @@ import {
     render,
     screen,
     userEvent,
+    waitFor,
 } from '@testing-library/react-native';
 
 import Index from '../app/index';
 import { i18n } from '../src/i18n';
+import { supabase } from '../src/lib/supabase/client';
+
+jest.mock('../src/lib/supabase/client', () => ({
+  supabase: {
+    auth: {
+      signInWithPassword: jest.fn(),
+    },
+  },
+}));
+
+const mockSignInWithPassword = jest.mocked(
+  supabase.auth.signInWithPassword
+);
 
 describe('<Index />', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('en');
+    mockSignInWithPassword.mockReset();
   });
 
   test('renders the sign-in screen in English', async () => {
@@ -43,7 +58,7 @@ describe('<Index />', () => {
     expect(
       await screen.findByText('Mantén Dublín en movimiento.')
     ).toBeOnTheScreen();
-        expect(
+    expect(
       screen.getByText(
         'Inicia sesión para acceder a tu espacio de operaciones.'
       )
@@ -80,7 +95,7 @@ describe('<Index />', () => {
     expect(signInButton).toBeEnabled();
   });
 
-    test('toggles password visibility', async () => {
+  test('toggles password visibility', async () => {
     const user = userEvent.setup();
 
     await render(<Index />);
@@ -97,6 +112,90 @@ describe('<Index />', () => {
     expect(
       screen.getByRole('button', { name: 'Hide password' })
     ).toBeOnTheScreen();
+  });
+  test('submits credentials and allows retry after an error', async () => {
+    mockSignInWithPassword.mockRejectedValue(
+      new Error('Request failed')
+    );
+
+    const user = userEvent.setup();
+
+    await render(<Index />);
+
+    await user.type(
+      screen.getByLabelText('Email'),
+      'employee@moby.ie'
+    );
+    await user.type(
+      screen.getByLabelText('Password'),
+      'StrongPass1!'
+    );
+    await user.press(
+      screen.getByRole('button', { name: 'Sign in' })
+    );
+
+    expect(mockSignInWithPassword).toHaveBeenCalledWith({
+      email: 'employee@moby.ie',
+      password: 'StrongPass1!',
+    });
+
+    expect(
+      await screen.findByRole('alert')
+    ).toHaveTextContent(
+      'We could not sign you in. Check your email, password and connection, then try again.'
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Sign in' })
+    ).toBeEnabled();
+
+    await user.press(
+      screen.getByRole('button', { name: 'Sign in' })
+    );
+
+    await waitFor(() => {
+      expect(mockSignInWithPassword).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  test('disables submission while the request is pending', async () => {
+    mockSignInWithPassword.mockImplementation(
+      () => new Promise(() => { })
+    );
+
+    const user = userEvent.setup();
+
+    await render(<Index />);
+
+    await user.type(
+      screen.getByLabelText('Email'),
+      'employee@moby.ie'
+    );
+    await user.type(
+      screen.getByLabelText('Password'),
+      'StrongPass1!'
+    );
+    await user.press(
+      screen.getByRole('button', { name: 'Sign in' })
+    );
+
+    const pendingButton = await screen.findByRole('button', {
+      name: 'Signing in...',
+    });
+
+    expect(pendingButton).toBeDisabled();
+    expect(screen.getByLabelText('Email')).toHaveProp(
+      'editable',
+      false
+    );
+    expect(screen.getByLabelText('Password')).toHaveProp(
+      'editable',
+      false
+    );
+
+    await user.press(pendingButton);
+
+    expect(mockSignInWithPassword).toHaveBeenCalledTimes(1);
   });
 
 });

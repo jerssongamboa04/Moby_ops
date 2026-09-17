@@ -53,6 +53,9 @@ export const authEs = {
     },
     forgotPassword: '¿Olvidaste tu contraseña?',
     signIn: 'Iniciar sesión',
+    signingIn: 'Iniciando sesión...',
+    signInError:
+        'No pudimos iniciar sesión. Comprueba tu correo, contraseña y conexión e inténtalo de nuevo.',
     helper: 'Acceso seguro para empleados.',
 
 } as const;

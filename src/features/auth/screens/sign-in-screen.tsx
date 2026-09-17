@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     KeyboardAvoidingView,
@@ -19,7 +19,11 @@ import {
 } from '../../../i18n';
 import { colors, radii, spacing } from '../../../theme/tokens';
 
-export function SignInScreen() {
+type SignInScreenProps = {
+    onSubmit: (email: string, password: string) => Promise<void>;
+};
+
+export function SignInScreen({ onSubmit }: SignInScreenProps) {
     const { t, i18n } = useTranslation('auth');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,6 +32,48 @@ export function SignInScreen() {
         i18n.language.startsWith('es') ? 'es' : 'en';
 
     const isFormComplete = email.trim().length > 0 && password.length > 0;
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [hasSubmitError, setHasSubmitError] = useState(false);
+
+    const submitInProgress = useRef(false);
+    const isMounted = useRef(false);
+    const canSubmit = isFormComplete && !isSubmitting;
+
+    const handleSubmit = async (): Promise<void> => {
+        if (!isFormComplete || submitInProgress.current) {
+            return;
+        }
+
+        submitInProgress.current = true;
+        setIsSubmitting(true);
+        setHasSubmitError(false);
+
+        try {
+            await onSubmit(email, password);
+
+            if (isMounted.current) {
+                setPassword('');
+            }
+        } catch {
+            if (isMounted.current) {
+                setHasSubmitError(true);
+            }
+        } finally {
+            submitInProgress.current = false;
+
+            if (isMounted.current) {
+                setIsSubmitting(false);
+            }
+        }
+    };
+    useEffect(() => {
+        isMounted.current = true;
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -98,6 +144,7 @@ export function SignInScreen() {
                                 style={styles.input}
                                 textContentType="emailAddress"
                                 value={email}
+                                editable={!isSubmitting}
                             />
                         </View>
 
@@ -113,6 +160,7 @@ export function SignInScreen() {
                                 style={[styles.input, styles.passwordInput]}
                                 textContentType="password"
                                 value={password}
+                                editable={!isSubmitting}
                             />
 
                             <Pressable
@@ -145,18 +193,35 @@ export function SignInScreen() {
                             <Text style={styles.forgotText}>{t('forgotPassword')}</Text>
                         </Pressable>
 
+                        {hasSubmitError && (
+                            <Text
+                                accessibilityRole="alert"
+                                accessibilityLiveRegion="polite"
+                                style={styles.submitError}
+                            >
+                                {t('signInError')}
+                            </Text>
+                        )}
+
                         <Pressable
                             accessibilityRole="button"
-                            accessibilityState={{ disabled: !isFormComplete }}
-                            disabled={!isFormComplete}
-                            onPress={() => undefined}
+                            accessibilityState={{
+                                disabled: !canSubmit,
+                                busy: isSubmitting,
+                            }}
+                            disabled={!canSubmit}
+                            onPress={() => {
+                                void handleSubmit();
+                            }}
                             style={({ pressed }) => [
                                 styles.signInButton,
-                                !isFormComplete && styles.signInButtonDisabled,
-                                pressed && isFormComplete && styles.signInButtonPressed,
+                                !canSubmit && styles.signInButtonDisabled,
+                                pressed && canSubmit && styles.signInButtonPressed,
                             ]}
                         >
-                            <Text style={styles.signInText}>{t('signIn')}</Text>
+                            <Text style={styles.signInText}>
+                                {t(isSubmitting ? 'signingIn' : 'signIn')}
+                            </Text>
                         </Pressable>
 
                         <Text style={styles.helper}>{t('helper')}</Text>
@@ -323,6 +388,12 @@ const styles = StyleSheet.create({
     },
     passwordVisibilityButtonPressed: {
         opacity: 0.6,
+    },
+    submitError: {
+        color: colors.charcoal,
+        fontSize: 14,
+        lineHeight: 21,
+        marginBottom: spacing.md,
     },
 
 });
