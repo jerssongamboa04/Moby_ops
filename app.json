@@ -8,7 +8,13 @@
     "scheme": "mobyops",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "CFBundleLocalizations": [
+          "en",
+          "es"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +23,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.jersson04.mobyops"
     },
     "web": {
       "output": "static",
@@ -62,6 +69,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b404e1b1-ed28-4f07-a703-5f3d98cce1da"
+      }
     }
   }
 }
