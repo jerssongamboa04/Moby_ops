@@ -6,6 +6,12 @@ import {
 } from '@testing-library/react-native';
 
 import Index from '../app/index';
+import {
+    useAuthStatus,
+} from '../src/features/auth/hooks/use-auth-status';
+import {
+    useAuthCallbackStore,
+} from '../src/features/auth/store/auth-callback-store';
 import { i18n } from '../src/i18n';
 import { supabase } from '../src/lib/supabase/client';
 
@@ -13,18 +19,29 @@ jest.mock('../src/lib/supabase/client', () => ({
   supabase: {
     auth: {
       signInWithPassword: jest.fn(),
+      signOut: jest.fn(),
     },
   },
+}));
+
+jest.mock('../src/features/auth/hooks/use-auth-status', () => ({
+  useAuthStatus: jest.fn(),
 }));
 
 const mockSignInWithPassword = jest.mocked(
   supabase.auth.signInWithPassword
 );
+const mockSignOut = jest.mocked(supabase.auth.signOut);
+const mockUseAuthStatus = jest.mocked(useAuthStatus);
 
 describe('<Index />', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('en');
     mockSignInWithPassword.mockReset();
+    mockUseAuthStatus.mockReset();
+    mockUseAuthStatus.mockReturnValue('unauthenticated');
+    mockSignOut.mockReset();
+    useAuthCallbackStore.getState().reset();
   });
 
   test('renders the sign-in screen in English', async () => {
@@ -196,6 +213,115 @@ describe('<Index />', () => {
     await user.press(pendingButton);
 
     expect(mockSignInWithPassword).toHaveBeenCalledTimes(1);
+  });
+
+  test('shows loading before the session is known', async () => {
+    mockUseAuthStatus.mockReturnValue('loading');
+
+    await render(<Index />);
+
+    expect(
+      screen.getByText('Loading your session...')
+    ).toBeOnTheScreen();
+
+    expect(
+      screen.queryByRole('button', { name: 'Sign in' })
+    ).not.toBeOnTheScreen();
+  });
+
+  test('shows the workspace when authenticated', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+
+    await render(<Index />);
+
+    expect(
+      screen.getByText('Your operations workspace')
+    ).toBeOnTheScreen();
+
+    expect(
+      screen.queryByLabelText('Password')
+    ).not.toBeOnTheScreen();
+  });
+
+  test('keeps the workspace hidden during an invitation callback', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+    useAuthCallbackStore.getState().startProcessing();
+
+    await render(<Index />);
+
+    expect(
+      screen.queryByText('Your operations workspace')
+    ).not.toBeOnTheScreen();
+
+    expect(
+      screen.getByText('Loading your session...')
+    ).toBeOnTheScreen();
+  });
+
+  test('returns to sign in when the session ends', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+
+    const { rerender } = await render(<Index />);
+
+    mockUseAuthStatus.mockReturnValue('unauthenticated');
+    await rerender(<Index />);
+
+    expect(
+      screen.getByRole('button', { name: 'Sign in' })
+    ).toBeOnTheScreen();
+
+    expect(
+      screen.queryByText('Your operations workspace')
+    ).not.toBeOnTheScreen();
+  });
+
+  test('requests local sign out', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+    mockSignOut.mockResolvedValue({ error: null });
+
+    const user = userEvent.setup();
+
+    await render(<Index />);
+
+    await user.press(
+      screen.getByRole('button', { name: 'Sign out' })
+    );
+
+    expect(mockSignOut).toHaveBeenCalledTimes(1);
+    expect(mockSignOut).toHaveBeenCalledWith({
+      scope: 'local',
+    });
+  });
+
+  test('allows retry when sign out fails', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+    mockSignOut.mockRejectedValue(new Error('Network unavailable'));
+
+    const user = userEvent.setup();
+
+    await render(<Index />);
+
+    await user.press(
+      screen.getByRole('button', { name: 'Sign out' })
+    );
+
+    expect(
+      await screen.findByRole('alert')
+    ).toHaveTextContent(
+      'We could not sign you out. Please try again.'
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Sign out' })
+    ).toBeEnabled();
+
+    await user.press(
+      screen.getByRole('button', { name: 'Sign out' })
+    );
+
+    await waitFor(() => {
+      expect(mockSignOut).toHaveBeenCalledTimes(2);
+    });
   });
 
 });

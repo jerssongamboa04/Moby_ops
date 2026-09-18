@@ -57,5 +57,13 @@ export const authEs = {
     signInError:
         'No pudimos iniciar sesión. Comprueba tu correo, contraseña y conexión e inténtalo de nuevo.',
     helper: 'Acceso seguro para empleados.',
+    sessionLoading: 'Cargando tu sesión...',
+    workspace: {
+        title: 'Tu espacio de operaciones',
+        description: 'Has iniciado sesión.',
+        signOut: 'Cerrar sesión',
+        signingOut: 'Cerrando sesión...',
+        signOutError: 'No pudimos cerrar la sesión. Inténtalo de nuevo.',
+    },
 
 } as const;

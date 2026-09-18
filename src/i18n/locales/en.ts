@@ -57,4 +57,12 @@ export const authEn = {
   signInError:
     'We could not sign you in. Check your email, password and connection, then try again.',
   helper: 'Secure access for employees.',
+  sessionLoading: 'Loading your session...',
+  workspace: {
+    title: 'Your operations workspace',
+    description: 'You are signed in.',
+    signOut: 'Sign out',
+    signingOut: 'Signing out...',
+    signOutError: 'We could not sign you out. Please try again.',
+  },
 } as const;
