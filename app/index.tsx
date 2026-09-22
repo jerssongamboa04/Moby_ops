@@ -7,9 +7,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuthStatus } from '@/src/features/auth/hooks/use-auth-status';
+import { ProfileAccessScreen } from '@/src/features/auth/screens/profile-access-screen';
 import { SignInScreen } from '@/src/features/auth/screens/sign-in-screen';
 import { useAuthCallbackStore } from '@/src/features/auth/store/auth-callback-store';
-import { OperationsScreen } from '@/src/features/operations/screens/operations-screen';
 import { supabase } from '@/src/lib/supabase/client';
 import { signIn } from '@/src/lib/supabase/sign-in';
 import { colors, spacing } from '@/src/theme/tokens';
@@ -56,7 +56,7 @@ export default function Index() {
   }
 
   if (authStatus === 'authenticated') {
-    return <OperationsScreen onSignOut={handleSignOut} />;
+    return <ProfileAccessScreen onSignOut={handleSignOut} />;
   }
 
   return <SignInScreen onSubmit={handleSubmit} />;

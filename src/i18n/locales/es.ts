@@ -65,5 +65,18 @@ export const authEs = {
         signingOut: 'Cerrando sesión...',
         signOutError: 'No pudimos cerrar la sesión. Inténtalo de nuevo.',
     },
+    profileAccess: {
+        loading: 'Comprobando tu acceso...',
+        inactiveTitle: 'Acceso no habilitado',
+        inactiveDescription:
+            'Tu cuenta no tiene habilitado el acceso operativo. Contacta con tu supervisor.',
+        missingTitle: 'Configuración de cuenta pendiente',
+        missingDescription:
+            'El perfil de tu cuenta todavía no está configurado. Contacta con tu supervisor.',
+        errorTitle: 'No pudimos comprobar tu acceso',
+        errorDescription:
+            'Comprueba tu conexión e inténtalo de nuevo.',
+        retry: 'Comprobar de nuevo',
+    },
 
 } as const;

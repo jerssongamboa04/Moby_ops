@@ -14,6 +14,9 @@ import {
 } from '../src/features/auth/store/auth-callback-store';
 import { i18n } from '../src/i18n';
 import { supabase } from '../src/lib/supabase/client';
+import {
+    getOwnProfile,
+} from '../src/lib/supabase/get-own-profile';
 
 jest.mock('../src/lib/supabase/client', () => ({
   supabase: {
@@ -28,34 +31,58 @@ jest.mock('../src/features/auth/hooks/use-auth-status', () => ({
   useAuthStatus: jest.fn(),
 }));
 
+jest.mock('../src/lib/supabase/get-own-profile', () => ({
+  getOwnProfile: jest.fn(),
+}));
+
 const mockSignInWithPassword = jest.mocked(
   supabase.auth.signInWithPassword
 );
 const mockSignOut = jest.mocked(supabase.auth.signOut);
 const mockUseAuthStatus = jest.mocked(useAuthStatus);
+const mockGetOwnProfile = jest.mocked(getOwnProfile);
 
 describe('<Index />', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('en');
+
     mockSignInWithPassword.mockReset();
+    mockSignOut.mockReset();
+
     mockUseAuthStatus.mockReset();
     mockUseAuthStatus.mockReturnValue('unauthenticated');
-    mockSignOut.mockReset();
+
+    mockGetOwnProfile.mockReset();
+    mockGetOwnProfile.mockResolvedValue({
+      id: 'employee-1',
+      role: 'employee',
+      is_active: true,
+    });
+
     useAuthCallbackStore.getState().reset();
   });
 
   test('renders the sign-in screen in English', async () => {
     await render(<Index />);
 
-    expect(screen.getByText('Keep Dublin moving.')).toBeOnTheScreen();
     expect(
-      screen.getByText('Sign in to access your operations workspace.')
+      screen.getByText('Keep Dublin moving.')
     ).toBeOnTheScreen();
+
+    expect(
+      screen.getByText(
+        'Sign in to access your operations workspace.'
+      )
+    ).toBeOnTheScreen();
+
     expect(
       screen.queryByText('Internal operations prototype')
     ).not.toBeOnTheScreen();
+
     expect(screen.getByLabelText('Email')).toBeOnTheScreen();
     expect(screen.getByLabelText('Password')).toBeOnTheScreen();
+
+    expect(mockGetOwnProfile).not.toHaveBeenCalled();
   });
 
   test('changes the sign-in screen to Spanish', async () => {
@@ -66,25 +93,37 @@ describe('<Index />', () => {
     expect(
       screen.getByRole('button', { name: 'EN' })
     ).toBeSelected();
+
     expect(
       screen.getByRole('button', { name: 'ES' })
     ).not.toBeSelected();
 
-    await user.press(screen.getByRole('button', { name: 'ES' }));
+    await user.press(
+      screen.getByRole('button', { name: 'ES' })
+    );
 
     expect(
       await screen.findByText('Mantén Dublín en movimiento.')
     ).toBeOnTheScreen();
+
     expect(
       screen.getByText(
         'Inicia sesión para acceder a tu espacio de operaciones.'
       )
     ).toBeOnTheScreen();
-    expect(screen.getByLabelText('Correo electrónico')).toBeOnTheScreen();
-    expect(screen.getByLabelText('Contraseña')).toBeOnTheScreen();
+
+    expect(
+      screen.getByLabelText('Correo electrónico')
+    ).toBeOnTheScreen();
+
+    expect(
+      screen.getByLabelText('Contraseña')
+    ).toBeOnTheScreen();
+
     expect(
       screen.getByRole('button', { name: 'EN' })
     ).not.toBeSelected();
+
     expect(
       screen.getByRole('button', { name: 'ES' })
     ).toBeSelected();
@@ -119,17 +158,25 @@ describe('<Index />', () => {
 
     const passwordInput = screen.getByLabelText('Password');
 
-    expect(passwordInput).toHaveProp('secureTextEntry', true);
+    expect(passwordInput).toHaveProp(
+      'secureTextEntry',
+      true
+    );
 
     await user.press(
       screen.getByRole('button', { name: 'Show password' })
     );
 
-    expect(passwordInput).toHaveProp('secureTextEntry', false);
+    expect(passwordInput).toHaveProp(
+      'secureTextEntry',
+      false
+    );
+
     expect(
       screen.getByRole('button', { name: 'Hide password' })
     ).toBeOnTheScreen();
   });
+
   test('submits credentials and allows retry after an error', async () => {
     mockSignInWithPassword.mockRejectedValue(
       new Error('Request failed')
@@ -143,10 +190,12 @@ describe('<Index />', () => {
       screen.getByLabelText('Email'),
       'employee@moby.ie'
     );
+
     await user.type(
       screen.getByLabelText('Password'),
       'StrongPass1!'
     );
+
     await user.press(
       screen.getByRole('button', { name: 'Sign in' })
     );
@@ -177,7 +226,7 @@ describe('<Index />', () => {
 
   test('disables submission while the request is pending', async () => {
     mockSignInWithPassword.mockImplementation(
-      () => new Promise(() => { })
+      () => new Promise(() => {})
     );
 
     const user = userEvent.setup();
@@ -188,10 +237,12 @@ describe('<Index />', () => {
       screen.getByLabelText('Email'),
       'employee@moby.ie'
     );
+
     await user.type(
       screen.getByLabelText('Password'),
       'StrongPass1!'
     );
+
     await user.press(
       screen.getByRole('button', { name: 'Sign in' })
     );
@@ -201,10 +252,12 @@ describe('<Index />', () => {
     });
 
     expect(pendingButton).toBeDisabled();
+
     expect(screen.getByLabelText('Email')).toHaveProp(
       'editable',
       false
     );
+
     expect(screen.getByLabelText('Password')).toHaveProp(
       'editable',
       false
@@ -227,20 +280,24 @@ describe('<Index />', () => {
     expect(
       screen.queryByRole('button', { name: 'Sign in' })
     ).not.toBeOnTheScreen();
+
+    expect(mockGetOwnProfile).not.toHaveBeenCalled();
   });
 
-  test('shows the workspace when authenticated', async () => {
+  test('shows the workspace with an authenticated session and active profile', async () => {
     mockUseAuthStatus.mockReturnValue('authenticated');
 
     await render(<Index />);
 
     expect(
-      screen.getByText('Your operations workspace')
+      await screen.findByText('Your operations workspace')
     ).toBeOnTheScreen();
 
     expect(
       screen.queryByLabelText('Password')
     ).not.toBeOnTheScreen();
+
+    expect(mockGetOwnProfile).toHaveBeenCalledWith(supabase);
   });
 
   test('keeps the workspace hidden during an invitation callback', async () => {
@@ -256,12 +313,16 @@ describe('<Index />', () => {
     expect(
       screen.getByText('Loading your session...')
     ).toBeOnTheScreen();
+
+    expect(mockGetOwnProfile).not.toHaveBeenCalled();
   });
 
   test('returns to sign in when the session ends', async () => {
     mockUseAuthStatus.mockReturnValue('authenticated');
 
     const { rerender } = await render(<Index />);
+
+    await screen.findByText('Your operations workspace');
 
     mockUseAuthStatus.mockReturnValue('unauthenticated');
     await rerender(<Index />);
@@ -275,7 +336,7 @@ describe('<Index />', () => {
     ).not.toBeOnTheScreen();
   });
 
-  test('requests local sign out', async () => {
+  test('requests local sign out from the workspace', async () => {
     mockUseAuthStatus.mockReturnValue('authenticated');
     mockSignOut.mockResolvedValue({ error: null });
 
@@ -283,23 +344,31 @@ describe('<Index />', () => {
 
     await render(<Index />);
 
+    await screen.findByText('Your operations workspace');
+
     await user.press(
       screen.getByRole('button', { name: 'Sign out' })
     );
 
     expect(mockSignOut).toHaveBeenCalledTimes(1);
+
     expect(mockSignOut).toHaveBeenCalledWith({
       scope: 'local',
     });
   });
 
-  test('allows retry when sign out fails', async () => {
+  test('allows retry when workspace sign out fails', async () => {
     mockUseAuthStatus.mockReturnValue('authenticated');
-    mockSignOut.mockRejectedValue(new Error('Network unavailable'));
+
+    mockSignOut.mockRejectedValue(
+      new Error('Network unavailable')
+    );
 
     const user = userEvent.setup();
 
     await render(<Index />);
+
+    await screen.findByText('Your operations workspace');
 
     await user.press(
       screen.getByRole('button', { name: 'Sign out' })
@@ -324,4 +393,104 @@ describe('<Index />', () => {
     });
   });
 
+  test('blocks operations for an inactive profile', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+
+    mockGetOwnProfile.mockResolvedValue({
+      id: 'employee-1',
+      role: 'employee',
+      is_active: false,
+    });
+
+    await render(<Index />);
+
+    expect(
+      await screen.findByText('Access not enabled')
+    ).toBeOnTheScreen();
+
+    expect(
+      screen.queryByText('Your operations workspace')
+    ).not.toBeOnTheScreen();
+
+    expect(
+      screen.getByRole('button', { name: 'Sign out' })
+    ).toBeEnabled();
+  });
+
+  test('blocks operations when the profile is missing', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+    mockGetOwnProfile.mockResolvedValue(null);
+
+    await render(<Index />);
+
+    expect(
+      await screen.findByText('Account setup pending')
+    ).toBeOnTheScreen();
+
+    expect(
+      screen.queryByText('Your operations workspace')
+    ).not.toBeOnTheScreen();
+  });
+
+  test('allows retry after a profile query error', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+
+    mockGetOwnProfile
+      .mockRejectedValueOnce(new Error('Network unavailable'))
+      .mockResolvedValueOnce({
+        id: 'employee-1',
+        role: 'employee',
+        is_active: true,
+      });
+
+    const user = userEvent.setup();
+
+    await render(<Index />);
+
+    expect(
+      await screen.findByText('We could not check your access')
+    ).toBeOnTheScreen();
+
+    expect(
+      screen.queryByText('Your operations workspace')
+    ).not.toBeOnTheScreen();
+
+    await user.press(
+      screen.getByRole('button', { name: 'Check again' })
+    );
+
+    expect(
+      await screen.findByText('Your operations workspace')
+    ).toBeOnTheScreen();
+
+    expect(mockGetOwnProfile).toHaveBeenCalledTimes(2);
+  });
+
+  test('allows an inactive user to sign out', async () => {
+    mockUseAuthStatus.mockReturnValue('authenticated');
+
+    mockGetOwnProfile.mockResolvedValue({
+      id: 'employee-1',
+      role: 'employee',
+      is_active: false,
+    });
+
+    mockSignOut.mockResolvedValue({ error: null });
+
+    const user = userEvent.setup();
+
+    await render(<Index />);
+
+    await screen.findByText('Access not enabled');
+
+    await user.press(
+      screen.getByRole('button', { name: 'Sign out' })
+    );
+
+    expect(mockSignOut).toHaveBeenCalledTimes(1);
+
+    expect(mockSignOut).toHaveBeenCalledWith({
+      scope: 'local',
+    });
+  });
 });

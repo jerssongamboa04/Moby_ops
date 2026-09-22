@@ -65,4 +65,18 @@ export const authEn = {
     signingOut: 'Signing out...',
     signOutError: 'We could not sign you out. Please try again.',
   },
+
+  profileAccess: {
+    loading: 'Checking your access...',
+    inactiveTitle: 'Access not enabled',
+    inactiveDescription:
+      'Your account does not have operational access enabled. Contact your supervisor.',
+    missingTitle: 'Account setup pending',
+    missingDescription:
+      'Your account profile has not been configured yet. Contact your supervisor.',
+    errorTitle: 'We could not check your access',
+    errorDescription:
+      'Check your connection and try again.',
+    retry: 'Check again',
+  },
 } as const;
