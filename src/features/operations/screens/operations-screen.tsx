@@ -1,26 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { colors, radii, spacing } from '../../../theme/tokens';
-
+import { PublicOrderScreen } from '../../public-order/screens/public-order-screen';
 type OperationsScreenProps = {
   onSignOut: () => Promise<void>;
 };
-
 export function OperationsScreen({
   onSignOut,
 }: OperationsScreenProps) {
   const { t } = useTranslation('auth');
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [hasError, setHasError] = useState(false);
-
+  const { t: tPublicOrder } = useTranslation('publicOrder');
+  const [isCreatingAction, setIsCreatingAction] = useState(false);
   const signOutInProgress = useRef(false);
   const isMounted = useRef(false);
 
@@ -55,7 +54,13 @@ export function OperationsScreen({
       }
     }
   };
-
+  if (isCreatingAction) {
+    return (
+      <PublicOrderScreen
+        onBack={() => setIsCreatingAction(false)}
+      />
+    );
+  }
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.content}>
@@ -66,7 +71,20 @@ export function OperationsScreen({
         <Text style={styles.description}>
           {t('workspace.description')}
         </Text>
-
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ disabled: isSigningOut }}
+          disabled={isSigningOut}
+          onPress={() => setIsCreatingAction(true)}
+          style={({ pressed }) => [
+            styles.button,
+            (pressed || isSigningOut) && styles.buttonDimmed,
+          ]}
+        >
+          <Text style={styles.buttonText}>
+            {tPublicOrder('start')}
+          </Text>
+        </Pressable>
         {hasError && (
           <Text
             accessibilityRole="alert"

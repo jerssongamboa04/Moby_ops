@@ -2,8 +2,8 @@ import { getLocales } from 'expo-localization';
 import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import { authEn } from './locales/en';
-import { authEs } from './locales/es';
+import { authEn, publicOrderEn } from './locales/en';
+import { authEs, publicOrderEs } from './locales/es';
 
 const i18n = createInstance();
 
@@ -28,9 +28,11 @@ if (!i18n.isInitialized) {
     resources: {
       en: {
         auth: authEn,
+        publicOrder: publicOrderEn,
       },
       es: {
         auth: authEs,
+        publicOrder: publicOrderEs,
       },
     },
     lng: initialLanguage,

@@ -79,4 +79,28 @@ export const authEn = {
       'Check your connection and try again.',
     retry: 'Check again',
   },
+
+} as const;
+export const publicOrderEn = {
+  start: 'New Public Order',
+  title: 'Public Order',
+  description:
+    'Record the bicycle and the actions you have carried out.',
+  bikeId: 'Bicycle ID',
+  bikeIdPlaceholder: 'Enter the bicycle code',
+  actions: 'Actions completed',
+  actionsHint: 'Select at least one action.',
+  kickstandPositioned: 'Kickstand positioned',
+  bikeLocked: 'Bicycle locked',
+  bikeRepositioned: 'Bicycle repositioned',
+  notes: 'Notes (optional)',
+  notesPlaceholder: 'Add relevant details',
+  evidenceReminder:
+    'A photo before and a photo after the action are required.',
+  back: 'Back',
+  discardTitle: 'Discard this draft?',
+  discardDescription:
+    'The information you entered has not been saved.',
+  keepEditing: 'Keep editing',
+  discard: 'Discard',
 } as const;

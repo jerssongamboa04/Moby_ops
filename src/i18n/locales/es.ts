@@ -80,3 +80,26 @@ export const authEs = {
     },
 
 } as const;
+export const publicOrderEs = {
+    start: 'Nuevo Public Order',
+    title: 'Public Order',
+    description:
+        'Registra la bicicleta y las acciones que has realizado.',
+    bikeId: 'ID de la bicicleta',
+    bikeIdPlaceholder: 'Introduce el código de la bicicleta',
+    actions: 'Acciones realizadas',
+    actionsHint: 'Selecciona al menos una acción.',
+    kickstandPositioned: 'Pata colocada',
+    bikeLocked: 'Bicicleta asegurada',
+    bikeRepositioned: 'Bicicleta reposicionada',
+    notes: 'Observaciones (opcional)',
+    notesPlaceholder: 'Añade detalles relevantes',
+    evidenceReminder:
+        'Se requiere una foto de antes y otra de después de la actuación.',
+    back: 'Volver',
+    discardTitle: '¿Descartar este borrador?',
+    discardDescription:
+        'La información que has introducido no se ha guardado.',
+    keepEditing: 'Seguir editando',
+    discard: 'Descartar',
+} as const;
