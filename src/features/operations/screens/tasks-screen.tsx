@@ -23,7 +23,7 @@ function TaskMetrics({ counted, repeated }: { counted: number; repeated: number 
       { label: 'invalid', value: repeated, color: colors.danger }] as const).map((metric, index) => (
       <View key={metric.label} accessible accessibilityLabel={`${t(`history.${metric.label}`)}: ${metric.value}`}
         style={[styles.metric, index === 1 && styles.metricDivider]}>
-        <Ionicons name="checkmark-circle-outline" size={36} color={metric.color} accessible={false} />
+        <Ionicons name={metric.label === 'invalid' ? 'close-circle-outline' : 'checkmark-circle-outline'} size={36} color={metric.color} accessible={false} />
         <View style={styles.metricText}>
           <Text style={styles.count}>{metric.value}</Text>
           <Text style={styles.description}>{t(`history.${metric.label}`)}</Text>
@@ -179,7 +179,7 @@ export function TasksScreen() {
                     timeZone: 'Europe/Dublin', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
                   }).format(new Date(item.created_at))}</Text>
                   <View accessible accessibilityRole="image" accessibilityLabel={t(item.counted ? 'history.done' : 'history.invalidStatus')}>
-                    <Ionicons name="checkmark-circle" size={26} color={item.counted ? '#16803C' : colors.danger} accessible={false} />
+                    <Ionicons name={item.counted ? 'checkmark-circle' : 'close-circle'} size={26} color={item.counted ? '#16803C' : colors.danger} accessible={false} />
                   </View>
                 </View>
                 {([
