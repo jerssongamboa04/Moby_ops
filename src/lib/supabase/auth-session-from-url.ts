@@ -70,7 +70,7 @@ export async function createSessionFromAuthUrl(
     'type'
   );
 
-  if (callbackType !== 'invite') {
+  if (callbackType !== 'invite' && callbackType !== 'recovery') {
     throw new Error(
       'Unsupported authentication callback type'
     );

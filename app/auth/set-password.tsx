@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { useAuthCallbackStore } from '@/src/features/auth/store/auth-callback-store';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -25,6 +26,7 @@ import {
 
 export default function SetPasswordRoute() {
   const { t } = useTranslation('auth');
+  const recovery = useAuthCallbackStore((state) => state.recovery);
 
   const [hasSession, setHasSession] = useState(false);
   const [isPasswordSaved, setIsPasswordSaved] =
@@ -109,6 +111,7 @@ export default function SetPasswordRoute() {
     }
 
     if (isMounted.current) {
+      useAuthCallbackStore.getState().reset();
       router.replace('/');
     }
   };
@@ -177,7 +180,7 @@ export default function SetPasswordRoute() {
   }
 
   return (
-    <SetPasswordScreen onSubmit={handleSubmit} />
+    <SetPasswordScreen onSubmit={handleSubmit} recovery={recovery} />
   );
 }
 

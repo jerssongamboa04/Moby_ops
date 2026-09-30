@@ -23,7 +23,7 @@ describe('<AuthCallbackScreen />', () => {
     );
 
     expect(
-      screen.getByText('Checking your invitation...')
+      screen.getByText('Checking your link...')
     ).toBeOnTheScreen();
 
     expect(
@@ -47,11 +47,11 @@ describe('<AuthCallbackScreen />', () => {
     );
 
     expect(
-      screen.getByText('No pudimos completar la invitación.')
+      screen.getByText('No pudimos abrir este enlace.')
     ).toBeOnTheScreen();
 
     expect(
-      screen.queryByText('Comprobando tu invitación...')
+      screen.queryByText('Comprobando tu enlace...')
     ).not.toBeOnTheScreen();
 
     await user.press(

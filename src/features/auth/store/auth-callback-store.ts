@@ -8,30 +8,32 @@ export type AuthCallbackStatus =
 
 type AuthCallbackState = {
   status: AuthCallbackStatus;
+  recovery: boolean;
   startProcessing: () => void;
   markAsError: () => void;
-  markAsSuccess: () => void;
+  markAsSuccess: (type?: string | null) => void;
   reset: () => void;
 };
 
 export const useAuthCallbackStore = create<AuthCallbackState>()(
   (set) => ({
     status: 'idle',
+    recovery: false,
 
     startProcessing: () => {
-      set({ status: 'processing' });
+      set({ status: 'processing', recovery: false });
     },
 
     markAsError: () => {
       set({ status: 'error' });
     },
 
-    markAsSuccess: () => {
-      set({ status: 'success' });
+    markAsSuccess: (type) => {
+      set({ status: 'success', recovery: type === 'recovery' });
     },
 
     reset: () => {
-      set({ status: 'idle' });
+      set({ status: 'idle', recovery: false });
     },
   })
 );

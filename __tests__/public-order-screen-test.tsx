@@ -1,4 +1,6 @@
+jest.mock('../src/lib/supabase/client', () => ({ supabase: {} }));
 import {
+    act,
     render,
     screen,
     userEvent,
@@ -20,7 +22,7 @@ describe('<PublicOrderScreen />', () => {
   test('allows entering the bicycle ID and notes', async () => {
     const user = userEvent.setup();
 
-    await render(<PublicOrderScreen onBack={jest.fn()} />);
+    await render(<PublicOrderScreen />);
 
     await user.type(
       screen.getByLabelText('Bicycle ID'),
@@ -43,7 +45,7 @@ describe('<PublicOrderScreen />', () => {
   test('allows selecting and clearing actions independently', async () => {
     const user = userEvent.setup();
 
-    await render(<PublicOrderScreen onBack={jest.fn()} />);
+    await render(<PublicOrderScreen />);
 
     const kickstand = screen.getByRole('checkbox', {
       name: 'Kickstand positioned',
@@ -67,37 +69,28 @@ describe('<PublicOrderScreen />', () => {
     expect(locked).toBeChecked();
   });
 
-  test('returns immediately when the form is empty', async () => {
-    const onBack = jest.fn();
-    const user = userEvent.setup();
-
-    await render(<PublicOrderScreen onBack={onBack} />);
-
-    await user.press(
-      screen.getByRole('button', { name: 'Back' })
-    );
-
-    expect(onBack).toHaveBeenCalledTimes(1);
+  test('does not offer discard for an empty form', async () => {
+    await render(<PublicOrderScreen />);
+    expect(screen.queryByRole('button', { name: 'Discard draft' })).not.toBeOnTheScreen();
   });
 
   test('requires confirmation before discarding changes', async () => {
     const alert = jest
       .spyOn(Alert, 'alert')
       .mockImplementation(() => {});
-    const onBack = jest.fn();
     const user = userEvent.setup();
 
-    await render(<PublicOrderScreen onBack={onBack} />);
+    await render(<PublicOrderScreen />);
 
     await user.type(
       screen.getByLabelText('Bicycle ID'),
       'BIKE-123'
     );
     await user.press(
-      screen.getByRole('button', { name: 'Back' })
+      screen.getByRole('button', { name: 'Discard draft' })
     );
 
-    expect(onBack).not.toHaveBeenCalled();
+    expect(screen.getByLabelText('Bicycle ID')).toHaveProp('value', 'BIKE-123');
     expect(alert).toHaveBeenCalledWith(
       'Discard this draft?',
       'The information you entered has not been saved.',
@@ -111,15 +104,15 @@ describe('<PublicOrderScreen />', () => {
     );
 
     expect(discard?.onPress).toEqual(expect.any(Function));
-    discard?.onPress?.();
-
-    expect(onBack).toHaveBeenCalledTimes(1);
+    await act(async () => { discard?.onPress?.(); });
+    expect(screen.getByLabelText('Bicycle ID')).toHaveProp('value', '');
+    expect(screen.queryByRole('button', { name: 'Discard draft' })).not.toBeOnTheScreen();
   });
 
   test('renders the form in Spanish', async () => {
     await i18n.changeLanguage('es');
 
-    await render(<PublicOrderScreen onBack={jest.fn()} />);
+    await render(<PublicOrderScreen />);
 
     expect(
       screen.getByLabelText('ID de la bicicleta')

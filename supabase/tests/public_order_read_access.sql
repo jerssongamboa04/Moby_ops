@@ -17,7 +17,7 @@ insert into public.public_order_actions (
 values (
   '10000000-0000-4000-8000-000000000001',
   'aa116607-be9b-4297-81e9-c63d8425b121',
-  'TEST-RLS-BIKE',
+  'IE12H02911',
   true,
   53.3498,
   -6.2603,

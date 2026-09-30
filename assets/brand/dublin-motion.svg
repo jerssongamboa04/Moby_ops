@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 444 350" fill="none">
+<defs><linearGradient id="route" x1="0" y1="340" x2="150" y2="300" gradientUnits="userSpaceOnUse"><stop stop-color="#D1FF00" stop-opacity="0"/><stop offset=".7" stop-color="#D1FF00"/></linearGradient></defs>
+<!-- One coordinate system for the circle, route and skyline. -->
+<circle cx="445" cy="91" r="80" stroke="#D1FF00" stroke-width="11"/>
+<path d="M400 157C394 121 417 102 444 100" stroke="#999D9A" stroke-width=".8"/>
+<!-- Skyline traced by hand from the approved composition, not an exact raster copy. -->
+<g transform="translate(0 201) scale(.578125)" stroke="#A0A3A0" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+<path d="M0 195H768M0 207H110M126 207H174M210 207H310M327 207H391M483 204H655M687 203H733M240 215H328M474 220H532M550 212H673M548 221H626"/>
+<!-- Samuel Beckett Bridge: swept mast, suspension cables and deck. -->
+<path d="M80 190H232M102 75Q127 101 220 188M102 75Q152 121 232 188M108 83Q120 133 97 188M112 88Q129 137 110 188M122 98Q134 144 126 188M135 111Q144 151 143 188M149 126L161 189M164 140L178 188M181 153L195 188M198 167L212 188M111 84L82 189M120 93L91 189M132 107L105 189M146 122L119 189M161 136L134 189M176 150L150 189M192 163L168 189M207 175L185 189"/>
+<circle cx="181" cy="184" r="4"/>
+<!-- Left quay pavilion. -->
+<path d="M40 189V161H46V155H62V161H73V189M48 156L55 151L64 156M48 186V164H54V186M62 166V188M35 190H78"/>
+
+<path d="M309 194V176H329V194" />
+<path d="M314 182v4" stroke-width=".85"/>
+<path d="M322 182v4" stroke-width=".85"/>
+<path d="M329 194V170H378V194" />
+<path d="M334 176v4" stroke-width=".85"/>
+<path d="M334 186v4" stroke-width=".85"/>
+<path d="M342 176v4" stroke-width=".85"/>
+<path d="M342 186v4" stroke-width=".85"/>
+<path d="M350 176v4" stroke-width=".85"/>
+<path d="M350 186v4" stroke-width=".85"/>
+<path d="M358 176v4" stroke-width=".85"/>
+<path d="M358 186v4" stroke-width=".85"/>
+<path d="M366 176v4" stroke-width=".85"/>
+<path d="M366 186v4" stroke-width=".85"/>
+<path d="M374 176v4" stroke-width=".85"/>
+<path d="M374 186v4" stroke-width=".85"/>
+<path d="M378 194V176H398V194" />
+<path d="M383 182v4" stroke-width=".85"/>
+<path d="M391 182v4" stroke-width=".85"/>
+<path d="M400 194V157H441V194" />
+<path d="M405 163v4" stroke-width=".85"/>
+<path d="M405 173v4" stroke-width=".85"/>
+<path d="M405 183v4" stroke-width=".85"/>
+<path d="M413 163v4" stroke-width=".85"/>
+<path d="M413 173v4" stroke-width=".85"/>
+<path d="M413 183v4" stroke-width=".85"/>
+<path d="M421 163v4" stroke-width=".85"/>
+<path d="M421 173v4" stroke-width=".85"/>
+<path d="M421 183v4" stroke-width=".85"/>
+<path d="M429 163v4" stroke-width=".85"/>
+<path d="M429 173v4" stroke-width=".85"/>
+<path d="M429 183v4" stroke-width=".85"/>
+<path d="M437 163v4" stroke-width=".85"/>
+<path d="M437 173v4" stroke-width=".85"/>
+<path d="M437 183v4" stroke-width=".85"/>
+<path d="M443 194V174H459V194" />
+<path d="M448 180v4" stroke-width=".85"/>
+<path d="M456 180v4" stroke-width=".85"/>
+<path d="M461 194V164H503V194" />
+<path d="M466 170v4" stroke-width=".85"/>
+<path d="M466 180v4" stroke-width=".85"/>
+<path d="M474 170v4" stroke-width=".85"/>
+<path d="M474 180v4" stroke-width=".85"/>
+<path d="M482 170v4" stroke-width=".85"/>
+<path d="M482 180v4" stroke-width=".85"/>
+<path d="M490 170v4" stroke-width=".85"/>
+<path d="M490 180v4" stroke-width=".85"/>
+<path d="M498 170v4" stroke-width=".85"/>
+<path d="M498 180v4" stroke-width=".85"/>
+<path d="M508 194V176H530V194" />
+<path d="M513 182v4" stroke-width=".85"/>
+<path d="M521 182v4" stroke-width=".85"/>
+<path d="M611 194V173H634V194" />
+<path d="M616 179v4" stroke-width=".85"/>
+<path d="M624 179v4" stroke-width=".85"/>
+<path d="M635 194V157H669V194" />
+<path d="M640 163v4" stroke-width=".85"/>
+<path d="M640 173v4" stroke-width=".85"/>
+<path d="M640 183v4" stroke-width=".85"/>
+<path d="M648 163v4" stroke-width=".85"/>
+<path d="M648 173v4" stroke-width=".85"/>
+<path d="M648 183v4" stroke-width=".85"/>
+<path d="M656 163v4" stroke-width=".85"/>
+<path d="M656 173v4" stroke-width=".85"/>
+<path d="M656 183v4" stroke-width=".85"/>
+<path d="M664 163v4" stroke-width=".85"/>
+<path d="M664 173v4" stroke-width=".85"/>
+<path d="M664 183v4" stroke-width=".85"/>
+<path d="M671 194V173H691V194" />
+<path d="M676 179v4" stroke-width=".85"/>
+<path d="M684 179v4" stroke-width=".85"/>
+<path d="M708 194V171H725V194" />
+<path d="M713 177v4" stroke-width=".85"/>
+<path d="M713 187v4" stroke-width=".85"/>
+<path d="M721 177v4" stroke-width=".85"/>
+<path d="M721 187v4" stroke-width=".85"/>
+<path d="M726 194V160H743V194" />
+<path d="M731 166v4" stroke-width=".85"/>
+<path d="M731 176v4" stroke-width=".85"/>
+<path d="M731 186v4" stroke-width=".85"/>
+<path d="M739 166v4" stroke-width=".85"/>
+<path d="M739 176v4" stroke-width=".85"/>
+<path d="M739 186v4" stroke-width=".85"/>
+<path d="M351 170V167H362V170M400 157H408L411 153L414 157M414 193V183Q418 179 422 183V193M429 193V181H434V193M469 193V183H475V193M485 193V182H492V193" />
+<path d="M529 193V164H539V153H553V147H584V153H599V163H607V193M536 192V165H601V192M539 160H599M541 160L569 148L596 160M541 164H596M541 189H598M528 194H609" />
+<path d="M554 146V126H558V117Q558 108 568 105Q579 108 579 117V126H583V146M554 126H583M558 120H579M553 131H584M555 145H582M568 105V98M565 101H571M561 115Q568 104 575 115M567 109V123M574 113V124" />
+<path d="M544 166V189M546 167V189" stroke-width=".85"/>
+<path d="M551 166V189M553 167V189" stroke-width=".85"/>
+<path d="M558 166V189M560 167V189" stroke-width=".85"/>
+<path d="M565 166V189M567 167V189" stroke-width=".85"/>
+<path d="M572 166V189M574 167V189" stroke-width=".85"/>
+<path d="M579 166V189M581 167V189" stroke-width=".85"/>
+<path d="M586 166V189M588 167V189" stroke-width=".85"/>
+<path d="M593 166V189M595 167V189" stroke-width=".85"/>
+<path d="M558 134V143" stroke-width=".85"/>
+<path d="M563 134V143" stroke-width=".85"/>
+<path d="M568 134V143" stroke-width=".85"/>
+<path d="M573 134V143" stroke-width=".85"/>
+<path d="M578 134V143" stroke-width=".85"/>
+<path d="M565 155H572M568 153V157M699 20L694 194H704L699 20" stroke-width="1"/>
+<path d="M12 126h9m4 0h12m-8-5q5-8 11 0h8M48 108h8m4-3q5-8 11 0h7m-8 5h12M156 93h26m3-4h23m-20 8h36M611 103h10m4-4q5-10 12 0h8m-2 6h20" stroke="#CDD0CB" stroke-width=".9"/>
+</g>
+<path d="M148 317C174 300 174 279 197 277H219C252 277 244 224 283 224H331" stroke="#969C98" stroke-width=".8"/>
+<path d="M0 341C74 339 114 325 143 299C163 281 162 261 194 261H286C319 261 328 235 343 213C358 192 364 186 377 186C393 186 400 178 400 157" stroke="url(#route)" stroke-width="6" stroke-linecap="round"/>
+<circle cx="143" cy="299" r="6.5" fill="#292B29" stroke="#FAFAF8" stroke-width="2"/>
+<circle cx="400" cy="157" r="6.5" fill="#292B29" stroke="#FAFAF8" stroke-width="2"/>
+</svg>

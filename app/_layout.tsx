@@ -29,12 +29,12 @@ export default function RootLayout() {
         useAuthCallbackStore.getState().markAsError();
       },
       (result) => {
-        if (result.type !== 'invite') {
+        if (result.type !== 'invite' && result.type !== 'recovery') {
           useAuthCallbackStore.getState().markAsError();
           return;
         }
 
-        useAuthCallbackStore.getState().markAsSuccess();
+        useAuthCallbackStore.getState().markAsSuccess(result.type);
         router.replace('/auth/set-password');
       },
       () => {

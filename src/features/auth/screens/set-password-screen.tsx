@@ -24,6 +24,7 @@ import {
 } from '../../../theme/tokens';
 
 export type SetPasswordScreenProps = {
+  recovery?: boolean;
   onSubmit: (
     password: string
   ) => void | Promise<void>;
@@ -41,6 +42,7 @@ function isStrongPassword(password: string): boolean {
 
 export function SetPasswordScreen({
   onSubmit,
+  recovery = false,
 }: SetPasswordScreenProps) {
   const { t, i18n } = useTranslation('auth');
   const [password, setPassword] = useState('');
@@ -85,7 +87,7 @@ export function SetPasswordScreen({
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         behavior={
-          Platform.OS === 'ios' ? 'padding' : undefined
+          Platform.OS === 'ios' ? 'padding' : 'height'
         }
         style={styles.keyboardView}
       >
@@ -139,15 +141,15 @@ export function SetPasswordScreen({
 
           <View style={styles.hero}>
             <Text style={styles.eyebrow}>
-              {t('setPassword.eyebrow')}
+              {t(recovery ? 'recovery.passwordEyebrow' : 'setPassword.eyebrow')}
             </Text>
 
             <Text style={styles.title}>
-              {t('setPassword.title')}
+              {t(recovery ? 'recovery.passwordTitle' : 'setPassword.title')}
             </Text>
 
             <Text style={styles.description}>
-              {t('setPassword.description')}
+              {t(recovery ? 'recovery.passwordDescription' : 'setPassword.description')}
             </Text>
           </View>
 
@@ -306,7 +308,7 @@ export function SetPasswordScreen({
                 {t(
                   isSubmitting
                     ? 'setPassword.saving'
-                    : 'setPassword.submit'
+                    : recovery ? 'recovery.save' : 'setPassword.submit'
                 )}
               </Text>
             </Pressable>

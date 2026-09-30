@@ -31,7 +31,7 @@ describe('<AuthCallbackRoute />', () => {
     await render(<AuthCallbackRoute />);
 
     expect(
-      screen.getByText('Checking your invitation...')
+      screen.getByText('Checking your link...')
     ).toBeOnTheScreen();
 
     await act(async () => {
@@ -40,12 +40,12 @@ describe('<AuthCallbackRoute />', () => {
 
     expect(
       screen.getByText(
-        'We could not complete your invitation.'
+        'We could not open this link.'
       )
     ).toBeOnTheScreen();
 
     expect(
-      screen.queryByText('Checking your invitation...')
+      screen.queryByText('Checking your link...')
     ).not.toBeOnTheScreen();
 
     expect(router.replace).not.toHaveBeenCalled();

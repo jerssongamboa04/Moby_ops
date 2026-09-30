@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     ActivityIndicator,
@@ -11,7 +11,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../../../lib/supabase/client';
 import { getOwnProfile } from '../../../lib/supabase/get-own-profile';
 import { colors, radii, spacing } from '../../../theme/tokens';
-import { OperationsScreen } from '../../operations/screens/operations-screen';
 
 type AccessState =
   | 'loading'
@@ -21,11 +20,13 @@ type AccessState =
   | 'error';
 
 type ProfileAccessScreenProps = {
+  children: ReactNode;
   onSignOut: () => Promise<void>;
 };
 
 export function ProfileAccessScreen({
   onSignOut,
+  children,
 }: ProfileAccessScreenProps) {
   const { t } = useTranslation('auth');
   const [access, setAccess] = useState<AccessState>('loading');
@@ -99,7 +100,7 @@ export function ProfileAccessScreen({
   };
 
   if (access === 'active') {
-    return <OperationsScreen onSignOut={onSignOut} />;
+    return <>{children}</>;
   }
 
   return (

@@ -75,7 +75,7 @@ describe('createSessionFromAuthUrl', () => {
 
   describe('createSessionFromAuthUrl supported callback types', () => {
     test.each([
-      ['recovery', '&type=recovery'],
+      ['signup', '&type=signup'],
       ['missing', ''],
     ])(
       'does not establish a session for a %s callback type',
@@ -109,4 +109,11 @@ describe('createSessionFromAuthUrl', () => {
       }
     );
   });
+});
+test('accepts recovery tokens only after Supabase validates the session', async () => {
+ const setSession = jest.fn().mockResolvedValue({ error: null });
+ const url = 'mobyops://auth/callback#access_token=a&refresh_token=b&type=recovery';
+ await expect(createSessionFromAuthUrl({ auth: { setSession } }, url)).resolves.toEqual({ handled: true, type: 'recovery' });
+ setSession.mockResolvedValue({ error: new Error('expired') });
+ await expect(createSessionFromAuthUrl({ auth: { setSession } }, url)).rejects.toThrow('expired');
 });

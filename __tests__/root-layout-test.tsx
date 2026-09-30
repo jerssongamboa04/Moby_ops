@@ -130,7 +130,7 @@ describe('<RootLayout />', () => {
     await act(async () => {
       onSessionReady?.({
         handled: true,
-        type: 'recovery',
+        type: 'signup',
       });
     });
 
@@ -256,4 +256,12 @@ describe('<RootLayout />', () => {
       expect(router.replace).not.toHaveBeenCalled();
     });
   });
+});
+test('routes a validated recovery link to password setup in recovery mode', async () => {
+ jest.mocked(registerAuthLinking).mockReturnValue(jest.fn());
+ await render(<RootLayout />);
+ await act(async () => { jest.mocked(registerAuthLinking).mock.lastCall?.[3]?.({ handled: true, type: 'recovery' }); });
+ expect(router.replace).toHaveBeenCalledWith('/auth/set-password');
+ expect(useAuthCallbackStore.getState().status).toBe('success');
+ expect(useAuthCallbackStore.getState().recovery).toBe(true);
 });

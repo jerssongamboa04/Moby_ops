@@ -12,9 +12,10 @@ import { SignInScreen } from '@/src/features/auth/screens/sign-in-screen';
 import { useAuthCallbackStore } from '@/src/features/auth/store/auth-callback-store';
 import { supabase } from '@/src/lib/supabase/client';
 import { signIn } from '@/src/lib/supabase/sign-in';
+import { OperationsTabs } from '@/src/features/operations/navigation/operations-tabs';
 import { colors, spacing } from '@/src/theme/tokens';
 
-export default function Index() {
+export default function OperationsLayout() {
   const { t } = useTranslation('auth');
   const authStatus = useAuthStatus(supabase);
   const callbackStatus = useAuthCallbackStore(
@@ -56,7 +57,11 @@ export default function Index() {
   }
 
   if (authStatus === 'authenticated') {
-    return <ProfileAccessScreen onSignOut={handleSignOut} />;
+    return (
+      <ProfileAccessScreen onSignOut={handleSignOut}>
+        <OperationsTabs />
+      </ProfileAccessScreen>
+    );
   }
 
   return <SignInScreen onSubmit={handleSubmit} />;
