@@ -1,5 +1,22 @@
 import type { Metadata } from "next";
+import { Archivo, Inter } from "next/font/google";
 import "./globals.css";
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  style: "normal",
+  display: "swap",
+  variable: "--font-archivo",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: "normal",
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "MOBY Ops",
@@ -8,5 +25,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="es"><body>{children}</body></html>;
+  return (
+    <html lang="es" className={`${archivo.variable} ${inter.variable}`}>
+      <body>{children}</body>
+    </html>
+  );
 }

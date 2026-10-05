@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
+  --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
+  --font-heading: var(--font-archivo), Arial, Helvetica, sans-serif;
   --color-neon: #D1FF00;
   --color-ink: #090909;
   --color-charcoal: #1F1F1F;
@@ -15,5 +17,10 @@ body {
   margin: 0;
   background: var(--color-canvas);
   color: var(--color-ink);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
+  font-weight: 700;
 }

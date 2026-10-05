@@ -62,8 +62,15 @@ identidad y renovación oficial; sin service_role ni caché compartida autentica
 Capturas con datos/fotos ficticios. Ajustes acordados: retirar Equipo, sustituir llave
 inglesa por icono de pata, utilizar SVG originales MOBY. Conservar ilustración exacta
 Dublín, panel, paleta y jerarquía. No descripciones automáticas de fotografías.
-Logos originales copiados a web/public/brand. Tipografía oficial sin archivos locales,
-pendiente. Extracción de ilustración para implementación visual pendiente.
+Logos originales copiados a web/public/brand. Tipografía decidida el 5 de octubre:
+Archivo 700/800 para títulos y cifras destacadas; Inter 400/500/600 para textos,
+tablas y controles. Sustituye Neue Haas Grotesk Text tras aprobación de Jersson,
+por disponibilidad en Google Fonts sin incorporar una licencia comercial.
+Integración mediante next/font/google, variables CSS y recursos servidos por la
+propia web; requiere acceso a Google Fonts al compilar. Fuente de sistema como
+respaldo durante carga. Sin cambios de tipografía móvil ni nuevas dependencias.
+Comprobar las fuentes realmente renderizadas antes de validar visualmente.
+Extracción de ilustración para implementación visual pendiente.
 
 ## Estado y validación
 
