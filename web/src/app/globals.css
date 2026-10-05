@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-neon: #D1FF00;
+  --color-ink: #090909;
+  --color-charcoal: #1F1F1F;
+  --color-canvas: #F2F4EF;
+  --color-muted: #58605A;
+  --color-border: #D8DED7;
+  --color-selected: #F3F9DB;
+  --color-danger: #A32D32;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: Arial, Helvetica, sans-serif;
+}

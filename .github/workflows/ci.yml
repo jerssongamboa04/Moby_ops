@@ -38,3 +38,28 @@ jobs:
 
       - name: Run tests
         run: npm test -- --runInBand
+
+  web-quality:
+    name: Web quality and production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install web dependencies
+        run: npm ci
+      - name: Run web ESLint
+        run: npm run lint
+      - name: Generate route types and check TypeScript
+        run: npm run typecheck
+      - name: Build web application
+        run: npm run build

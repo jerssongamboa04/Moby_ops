@@ -9,6 +9,7 @@
       ]
     }
   },
+  "exclude": ["node_modules", "web"],
   "include": [
     "**/*.ts",
     "**/*.tsx",

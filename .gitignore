@@ -41,3 +41,9 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Next.js application
+/web/.next/
+/web/out/
+/web/coverage/
+/web/.vercel/
