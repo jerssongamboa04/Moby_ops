@@ -24,3 +24,53 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
   font-weight: 700;
 }
+
+/* Shared frame for the approved Summary and Activity views. */
+.dashboard { min-height: 100dvh; }
+.dashboard-sidebar {
+  position: fixed; inset: 0 auto 0 0; width: 216px; padding: 28px 12px 24px;
+  display: flex; flex-direction: column; background: #141414; color: #fafafa;
+}
+.dashboard-brand { display: flex; align-items: baseline; gap: 8px; padding: 0 12px; }
+.dashboard-brand img { width: 132px; height: auto; }
+.dashboard-brand span { font-size: 16px; font-weight: 500; }
+.dashboard-navigation { display: flex; flex-direction: column; gap: 10px; margin-top: 36px; }
+.dashboard-nav-link { display: flex; align-items: center; gap: 16px; min-height: 48px; padding: 12px 18px; border-radius: 12px; }
+.dashboard-nav-link:hover { background: #2a2a2a; }
+.dashboard-nav-link[aria-current="page"] { background: var(--color-neon); color: var(--color-ink); font-weight: 600; }
+.dashboard-profile { display: flex; align-items: center; gap: 12px; margin: auto 12px 0; border-top: 1px solid #383838; padding-top: 20px; }
+.dashboard-profile p { margin: 0; font-size: 14px; }
+.dashboard-profile .dashboard-profile-role { margin-top: 4px; color: #cccccc; font-size: 12px; }
+.dashboard-avatar { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--color-neon); color: var(--color-ink); font-weight: 600; }
+.dashboard-main { margin-left: 216px; padding: 22px 30px 40px; max-width: 1800px; }
+.dashboard-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; }
+.dashboard-breadcrumb { margin: 0; font-size: 14px; color: var(--color-muted); }
+.dashboard-breadcrumb strong { color: var(--color-ink); font-weight: 600; }
+.dashboard-demo { padding: 6px 12px; border-radius: 9px; background: #efffc0; font-size: 12px; font-weight: 600; }
+.dashboard-language { display: flex; margin-left: auto; padding: 3px; border-radius: 999px; background: #e5e8e1; }
+.dashboard-language button { min-width: 42px; min-height: 32px; border: 0; border-radius: 999px; font-weight: 600; font-size: 12px; cursor: pointer; }
+.dashboard-language button[aria-pressed="true"] { background: var(--color-neon); color: var(--color-ink); }
+.dashboard-heading { margin: 40px 0 32px; }
+.dashboard-heading h1 { margin: 0; font-size: clamp(32px, 4vw, 52px); font-weight: 800; line-height: 1.08; letter-spacing: -0.04em; }
+.dashboard-tagline { margin: 8px 0 10px; font-size: clamp(18px, 2.3vw, 28px); line-height: 1.3; color: #444944; }
+.dashboard-heading time { color: var(--color-muted); font-size: 15px; }
+.dashboard-placeholder { padding: 40px; border: 1px solid var(--color-border); border-radius: 18px; background: #fff; box-shadow: 0 2px 10px #09090904; }
+.dashboard-placeholder-icon { display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: 20px; border-radius: 50%; background: #efffc0; }
+.dashboard-placeholder h2 { margin: 0 0 10px; font-size: 24px; letter-spacing: -0.025em; }
+.dashboard-placeholder p { max-width: 55ch; margin: 0; color: var(--color-muted); line-height: 1.6; }
+:where(a, button):focus-visible { outline: 3px solid #427614; outline-offset: 4px; }
+.dashboard-sidebar a:focus-visible { outline-color: #fff; }
+.skip-link { position: fixed; z-index: 20; left: 16px; top: 12px; transform: translateY(-200%); padding: 12px 20px; border-radius: 8px; background: #fff; color: #090909; }
+.skip-link:focus { transform: translateY(0); }
+@media (max-width: 760px) {
+  .dashboard-sidebar { position: static; width: auto; padding: 20px 16px 12px; }
+  .dashboard-brand { padding: 0; }
+  .dashboard-navigation { flex-direction: row; gap: 8px; margin-top: 20px; }
+  .dashboard-nav-link { flex: 1; justify-content: center; padding: 12px 8px; gap: 10px; }
+  .dashboard-profile { display: none; }
+  .dashboard-main { margin-left: 0; padding: 20px 16px 32px; }
+  .dashboard-topbar { gap: 12px; }
+  .dashboard-language { margin-left: 0; }
+  .dashboard-heading { margin-top: 32px; }
+  .dashboard-placeholder { padding: 28px 22px; }
+}

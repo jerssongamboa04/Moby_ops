@@ -61,5 +61,7 @@ jobs:
         run: npm run lint
       - name: Generate route types and check TypeScript
         run: npm run typecheck
+      - name: Run web behavior tests
+        run: npm test
       - name: Build web application
         run: npm run build

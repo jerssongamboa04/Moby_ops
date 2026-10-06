@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Inter } from "next/font/google";
+import { LocaleProvider } from "../i18n/locale-provider";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${archivo.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body><LocaleProvider>{children}</LocaleProvider></body>
     </html>
   );
 }
