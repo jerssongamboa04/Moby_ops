@@ -1,40 +1,53 @@
 # MOBY Ops Web
 
-Base del panel Next.js. [Decisiones](../docs/web-platform.md).
-Todavía sin autenticación ni datos reales; no es el dashboard terminado.
+Proyecto Next.js independiente dentro del repositorio móvil. Node 22.12+ de la
+rama 22, o Node 24. Lockfile propio; ejecutar comandos desde `web/`.
 
-Desde web/, Node 22 o 24:
+## Configuración local
 
-```bash
+Copiar `.env.example` a `.env.local` y sustituir los dos valores por la URL y la
+publishable key del mismo proyecto Supabase usado por la app móvil:
+
+```sh
+cp .env.example .env.local
 npm ci
 npm run dev
 ```
 
-Abrir http://localhost:3000. Controles: npm run lint, npm run typecheck, npm run build.
-Los comandos de raíz son Expo; npm run web en raíz es Expo Web, no este panel.
+No copiar variables EXPO ni claves administrativas. Las variables web se llaman
+NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. Usar una clave
+`sb_publishable_…`; este bloque no admite claves legacy/secret/service_role.
+No subir `.env.local` al repositorio. Configurar valores antes de compilar/reiniciar.
 
-Vercel: repositorio Moby_ops, Root Directory web, preset Next.js, instalación npm ci,
-build npm run build. Sin export estático: acceso previsto necesita servidor.
-Variables/redirects se definirán en la vertical de acceso. Nunca usar service_role.
+Acceso en `/login` con la cuenta invitada y contraseña ya configurada. Solo un
+supervisor activo puede entrar en `/` y `/activity`. No se crea ni promueve ninguna
+cuenta desde la web. Sesión server-side en cookies HttpOnly, SameSite=Lax, Secure
+en producción. No cliente Auth de navegador ni almacenamiento en localStorage.
+Cerrar sesión termina solo la sesión web actual, no la app móvil.
 
-## Estructura visual y pruebas
+## Validación
 
-Resumen (`/`) y Actividad (`/activity`) comparten navegación y proveedor ES/EN.
-La selección de idioma se conserva al navegar dentro de la sesión de página;
-recargar comienza en español. Los contenidos y perfil son de demostración.
-Esta entrega aún no tiene métricas, filtros, fotos ni autenticación web.
-
-Desde `web/`, tras `npm ci`:
-
-```bash
+```sh
 npm test
 npm run lint
 npm run typecheck
 npm run build
 npm run start
+npm audit --omit=dev
 ```
 
-`npm test` ejecuta Vitest una vez; `npm run test:watch` mantiene el modo de
-observación. La CI web incluye los tests. Node admitido: 22 desde 22.12, o 24.
-El componente del panel es cliente y se prueba con React Testing Library;
-las futuras rutas asíncronas de servidor necesitarán pruebas de integración/E2E.
+Sin configuración la build pasa y `/login` informa que falta configurarla;
+las páginas protegidas no se convierten en una demo pública. Pruebas automáticas
+con respuestas controladas del SDK; validar también el flujo con la cuenta real.
+
+## Estado
+
+Autenticación, autorización y marco ES/EN implementados. Backend de métricas
+aplicado y probado en Supabase. Conexión de indicadores a la vista pendiente:
+no se muestran cifras ni fechas ficticias. Resumen/Actividad aún contienen un
+mensaje provisional; no son los mockups terminados. Callback de invitación,
+set-password y recuperación web quedan pendientes; usar la cuenta previamente
+configurada por el flujo móvil. No se modificó Site URL ni enlaces móviles.
+
+Documentación: `../docs/web-platform.md`, `../docs/web-real-summary-metrics.md`
+y `../docs/web-auth-session.md`.

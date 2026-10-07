@@ -1,12 +1,11 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import Home from "../src/app/page";
-import Activity from "../src/app/activity/page";
+import { DashboardShell } from "../src/components/dashboard-shell";
 import { LocaleProvider } from "../src/i18n/locale-provider";
 
 function renderHome() {
-  return render(<LocaleProvider><Home /></LocaleProvider>);
+  return render(<LocaleProvider><DashboardShell page="summary" fullName="Jersson Gamboa" /></LocaleProvider>);
 }
 
 describe("dashboard navigation and language", () => {
@@ -26,7 +25,8 @@ describe("dashboard navigation and language", () => {
     await user.click(screen.getByRole("button", { name: "Inglés" }));
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Hello, Jersson");
     expect(screen.getByRole("navigation", { name: "Main navigation" })).toBeTruthy();
-    expect(screen.getByText("DEMO · Sample data")).toBeTruthy();
+    expect(screen.getByText("Jersson Gamboa")).toBeTruthy();
+    expect(screen.queryByText(/DEMO/)).toBeNull();
     expect(document.documentElement.lang).toBe("en");
     expect(screen.getByRole("button", { name: "English" }).getAttribute("aria-pressed")).toBe("true");
     await user.click(screen.getByRole("button", { name: "Spanish" }));
@@ -47,7 +47,7 @@ describe("dashboard navigation and language", () => {
     const user = userEvent.setup();
     const view = renderHome();
     await user.click(screen.getByRole("button", { name: "Inglés" }));
-    view.rerender(<LocaleProvider><Activity /></LocaleProvider>);
+    view.rerender(<LocaleProvider><DashboardShell page="activity" fullName="Jersson Gamboa" /></LocaleProvider>);
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Activity");
     const nav = screen.getByRole("navigation", { name: "Main navigation" });
     expect(within(nav).getByRole("link", { name: "Activity" }).getAttribute("aria-current")).toBe("page");

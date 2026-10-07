@@ -46,14 +46,12 @@ h1, h2, h3, h4, h5, h6 {
 .dashboard-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; }
 .dashboard-breadcrumb { margin: 0; font-size: 14px; color: var(--color-muted); }
 .dashboard-breadcrumb strong { color: var(--color-ink); font-weight: 600; }
-.dashboard-demo { padding: 6px 12px; border-radius: 9px; background: #efffc0; font-size: 12px; font-weight: 600; }
 .dashboard-language { display: flex; margin-left: auto; padding: 3px; border-radius: 999px; background: #e5e8e1; }
 .dashboard-language button { min-width: 42px; min-height: 32px; border: 0; border-radius: 999px; font-weight: 600; font-size: 12px; cursor: pointer; }
 .dashboard-language button[aria-pressed="true"] { background: var(--color-neon); color: var(--color-ink); }
 .dashboard-heading { margin: 40px 0 32px; }
 .dashboard-heading h1 { margin: 0; font-size: clamp(32px, 4vw, 52px); font-weight: 800; line-height: 1.08; letter-spacing: -0.04em; }
 .dashboard-tagline { margin: 8px 0 10px; font-size: clamp(18px, 2.3vw, 28px); line-height: 1.3; color: #444944; }
-.dashboard-heading time { color: var(--color-muted); font-size: 15px; }
 .dashboard-placeholder { padding: 40px; border: 1px solid var(--color-border); border-radius: 18px; background: #fff; box-shadow: 0 2px 10px #09090904; }
 .dashboard-placeholder-icon { display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: 20px; border-radius: 50%; background: #efffc0; }
 .dashboard-placeholder h2 { margin: 0 0 10px; font-size: 24px; letter-spacing: -0.025em; }
@@ -73,4 +71,29 @@ h1, h2, h3, h4, h5, h6 {
   .dashboard-language { margin-left: 0; }
   .dashboard-heading { margin-top: 32px; }
   .dashboard-placeholder { padding: 28px 22px; }
+}
+
+/* Functional sign-in frame; Summary/Activity visual blocks remain separate work. */
+.auth-page { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+.auth-card { position: relative; width: min(100%, 440px); padding: 32px; border: 1px solid var(--color-border); border-radius: 18px; background: #fff; }
+.auth-card h1 { margin: 28px 0 12px; font-size: 30px; line-height: 1.1; letter-spacing: -0.03em; }
+.auth-card p { color: var(--color-muted); line-height: 1.5; }
+.auth-card form { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+.auth-card input { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 10px; background: #fff; }
+.auth-card input:focus-visible { outline: 3px solid #427614; outline-offset: 2px; }
+.auth-card label { font-size: 14px; font-weight: 600; }
+.auth-card [role="alert"], .logout-control [role="alert"] { color: var(--color-danger); font-size: 14px; }
+.auth-submit { min-height: 46px; padding: 12px 18px; border: 0; border-radius: 10px; background: var(--color-neon); color: var(--color-ink); font-weight: 600; cursor: pointer; }
+.auth-submit:disabled { opacity: 0.6; cursor: wait; }
+.auth-language { position: absolute; right: 24px; top: 24px; }
+.auth-help { margin-top: 24px; font-size: 13px; }
+.logout-control { margin: 16px 12px 0; }
+.logout-control button { padding: 10px 0; color: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+.logout-control button:disabled { opacity: 0.6; cursor: wait; }
+.dashboard-profile > div { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .dashboard-sidebar .logout-control { margin: 10px 0 0; }
+  .auth-page { padding: 16px; }
+  .auth-card { padding: 24px; }
+  .auth-language { top: 20px; right: 20px; }
 }

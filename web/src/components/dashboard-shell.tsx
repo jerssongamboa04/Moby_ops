@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { LogoutControl } from "./logout-control";
 
 type Page = "summary" | "activity";
 
@@ -17,15 +18,16 @@ function NavigationIcon({ page }: { page: Page }) {
   );
 }
 
-export function DashboardShell({ page }: { page: Page }) {
+export function DashboardShell({ page, fullName }: { page: Page; fullName: string }) {
   const { t, i18n } = useTranslation();
+  const firstName = fullName.trim().split(/\s+/)[0];
+  const initials = fullName.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
   return (
     <div className="dashboard">
       <a className="skip-link" href="#main-content">{t("skip")}</a>
       <aside className="dashboard-sidebar">
         <div className="dashboard-brand">
           <Image src="/brand/moby-logo-on-dark.svg" alt="MOBY" width={132} height={38} priority />
-          <span>Ops</span>
         </div>
         <nav className="dashboard-navigation" aria-label={t("navigation")}>
           {([{ id: "summary", href: "/" }, { id: "activity", href: "/activity" }] as const).map((item) => (
@@ -37,14 +39,14 @@ export function DashboardShell({ page }: { page: Page }) {
           ))}
         </nav>
         <div className="dashboard-profile" aria-label={t("profile")}>
-          <span className="dashboard-avatar" aria-hidden="true">JG</span>
-          <div><p>Jersson</p><p className="dashboard-profile-role">{t("supervisor")} · Demo</p></div>
+          <span className="dashboard-avatar" aria-hidden="true">{initials}</span>
+          <div><p>{fullName}</p><p className="dashboard-profile-role">{t("supervisor")}</p></div>
         </div>
+        <LogoutControl />
       </aside>
       <main id="main-content" className="dashboard-main" tabIndex={-1}>
         <div className="dashboard-topbar">
           <p className="dashboard-breadcrumb">{t("operations")} / <strong>{t(page)}</strong></p>
-          <span className="dashboard-demo">{t("demo")}</span>
           <div className="dashboard-language" role="group" aria-label={t("language")}>
             {([{ code: "es", label: "spanish", text: "ES" }, { code: "en", label: "english", text: "EN" }] as const).map((locale) => (
               <button key={locale.code} type="button" aria-label={t(locale.label)}
@@ -54,9 +56,8 @@ export function DashboardShell({ page }: { page: Page }) {
           </div>
         </div>
         <header className="dashboard-heading">
-          <h1>{t(page === "summary" ? "greeting" : "activity")}</h1>
+          <h1>{t(page === "summary" ? "greeting" : "activity", { name: firstName })}</h1>
           <p className="dashboard-tagline">{t(page === "summary" ? "summaryTagline" : "activityTagline")}</p>
-          <time dateTime="2026-10-05">{t("demoDate")}</time>
         </header>
         <section className="dashboard-placeholder" aria-labelledby="pending-heading">
           <span className="dashboard-placeholder-icon"><NavigationIcon page={page} /></span>
