@@ -1,9 +1,11 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { LogoutControl } from "./logout-control";
+import { SummaryHero } from "./summary-hero";
 
 type Page = "summary" | "activity";
 
@@ -18,7 +20,7 @@ function NavigationIcon({ page }: { page: Page }) {
   );
 }
 
-export function DashboardShell({ page, fullName }: { page: Page; fullName: string }) {
+export function DashboardShell({ page, fullName, children, summaryInstant }: { page: Page; fullName: string; children?: ReactNode; summaryInstant?: string }) {
   const { t, i18n } = useTranslation();
   const firstName = fullName.trim().split(/\s+/)[0];
   const initials = fullName.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
@@ -44,9 +46,8 @@ export function DashboardShell({ page, fullName }: { page: Page; fullName: strin
         </div>
         <LogoutControl />
       </aside>
-      <main id="main-content" className="dashboard-main" tabIndex={-1}>
+      <main id="main-content" className={`dashboard-main${page === "summary" ? " dashboard-main--summary" : ""}`} tabIndex={-1}>
         <div className="dashboard-topbar">
-          <p className="dashboard-breadcrumb">{t("operations")} / <strong>{t(page)}</strong></p>
           <div className="dashboard-language" role="group" aria-label={t("language")}>
             {([{ code: "es", label: "spanish", text: "ES" }, { code: "en", label: "english", text: "EN" }] as const).map((locale) => (
               <button key={locale.code} type="button" aria-label={t(locale.label)}
@@ -55,15 +56,15 @@ export function DashboardShell({ page, fullName }: { page: Page; fullName: strin
             ))}
           </div>
         </div>
-        <header className="dashboard-heading">
-          <h1>{t(page === "summary" ? "greeting" : "activity", { name: firstName })}</h1>
-          <p className="dashboard-tagline">{t(page === "summary" ? "summaryTagline" : "activityTagline")}</p>
-        </header>
-        <section className="dashboard-placeholder" aria-labelledby="pending-heading">
+        {page === "summary" ? <SummaryHero name={firstName} instant={summaryInstant} /> : <header className="dashboard-heading">
+          <h1>{t("activity")}</h1>
+          <p className="dashboard-tagline">{t("activityTagline")}</p>
+        </header>}
+        {children ?? <section className="dashboard-placeholder" aria-labelledby="pending-heading">
           <span className="dashboard-placeholder-icon"><NavigationIcon page={page} /></span>
           <h2 id="pending-heading">{t(page === "summary" ? "summaryPending" : "activityPending")}</h2>
           <p>{t("pendingDescription")}</p>
-        </section>
+        </section>}
       </main>
     </div>
   );

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const sdk = vi.hoisted(() => {
   const maybeSingle = vi.fn();
   return {
+    rpc: vi.fn(() => ({ abortSignal: vi.fn().mockResolvedValue({ data: null, error: null }) })),
     auth: { signInWithPassword: vi.fn(), signOut: vi.fn(), getUser: vi.fn() },
     from: vi.fn(() => ({ select: () => ({ eq: () => ({ maybeSingle }) }) })), maybeSingle,
   };
@@ -74,6 +75,7 @@ describe("protected server pages", () => {
     sdk.auth.getUser.mockResolvedValue({ data: { user: null }, error: null });
     await expect(Page()).rejects.toMatchObject({ digest: "NEXT_REDIRECT;replace;/login;307;" });
     expect(sdk.from).not.toHaveBeenCalled();
+    expect(sdk.rpc).not.toHaveBeenCalled();
   });
   it.each([Home, Activity])("rejects an inactive supervisor on each page", async (Page) => {
     sdk.maybeSingle.mockResolvedValue({ data: { full_name: "A", role: "supervisor", is_active: false }, error: null });
@@ -83,5 +85,7 @@ describe("protected server pages", () => {
     const page = await Home();
     expect(page.props.fullName).toBe("Jersson Gamboa");
     expect(page.props.page).toBe("summary");
+    expect(sdk.rpc).toHaveBeenCalledWith("read_team_summary_metrics");
+    expect(page.props.children.props.result).toEqual({ status: "unavailable" });
   });
 });

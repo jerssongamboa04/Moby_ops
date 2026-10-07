@@ -1,7 +1,12 @@
 export const resources = {
   es: { translation: {
+    metricsTitle: "Actividad de {{month}}", metricsFallbackTitle: "Actividad del mes",
+    metricsDescription: "Actuaciones válidas · Una bicicleta puede aparecer varias veces.",
+    metric_attended: "Bicicletas atendidas", metric_locked: "Aseguradas", metric_kickstand: "Pata colocada", metric_repositioned: "Reposicionadas",
+    metricsToday: "Hoy", metricsRefresh: "Actualizar", metricsRefreshing: "Actualizando…",
+    metricsUpdated: "Actualizado: {{time}} · Dublín", metricsError: "No se pudieron cargar las métricas. Inténtalo de nuevo.",
     navigation: "Navegación principal", summary: "Resumen", activity: "Actividad",
-    operations: "Operaciones", skip: "Ir al contenido",
+    skip: "Ir al contenido",
     language: "Idioma", spanish: "Español", english: "Inglés", supervisor: "Supervisor",
     greeting: "Hola, {{name}}", summaryTagline: "Mantenemos Dublín en movimiento.",
     activityTagline: "Cada actuación, con su evidencia.",
@@ -17,8 +22,13 @@ export const resources = {
     configurationError: "La conexión de esta web aún no está configurada.", retry: "Reintentar",
   } },
   en: { translation: {
+    metricsTitle: "{{month}} activity", metricsFallbackTitle: "Monthly activity",
+    metricsDescription: "Valid actions · A bicycle may appear more than once.",
+    metric_attended: "Bicycles attended", metric_locked: "Locked", metric_kickstand: "Kickstand positioned", metric_repositioned: "Repositioned",
+    metricsToday: "Today", metricsRefresh: "Refresh", metricsRefreshing: "Refreshing…",
+    metricsUpdated: "Updated: {{time}} · Dublin", metricsError: "Unable to load metrics. Please try again.",
     navigation: "Main navigation", summary: "Summary", activity: "Activity",
-    operations: "Operations", skip: "Skip to content",
+    skip: "Skip to content",
     language: "Language", spanish: "Spanish", english: "English", supervisor: "Supervisor",
     greeting: "Hello, {{name}}", summaryTagline: "Keeping Dublin moving.",
     activityTagline: "Every action, with its evidence.",
