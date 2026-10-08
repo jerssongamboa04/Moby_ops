@@ -85,7 +85,56 @@ describe("protected server pages", () => {
     const page = await Home();
     expect(page.props.fullName).toBe("Jersson Gamboa");
     expect(page.props.page).toBe("summary");
-    expect(sdk.rpc).toHaveBeenCalledWith("read_team_summary_metrics");
+    expect(sdk.rpc).toHaveBeenCalledWith("read_team_summary_metrics_filtered", expect.objectContaining({ p_employee_id: null }));
+    expect(sdk.rpc).toHaveBeenCalledWith("read_team_summary_collaborators");
     expect(page.props.children.props.result).toEqual({ status: "unavailable" });
   });
+});
+
+it("rejects malformed URL filters after authentication and before any metric/list RPC", async () => {
+  const page = await Home({ searchParams: Promise.resolve({ employee: "malicious-input" }) });
+  expect(page.props.children.props.filters).toBeNull();
+  expect(sdk.rpc).not.toHaveBeenCalled();
+});
+it("passes the selected historical month and canonical collaborator to PostgreSQL", async () => {
+  const id = "00000000-0000-4000-8000-000000009102";
+  const page = await Home({ searchParams: Promise.resolve({ month: "2024-03", employee: id }) });
+  expect(sdk.rpc).toHaveBeenCalledWith("read_team_summary_metrics_filtered", { p_month: "2024-03-01", p_employee_id: id });
+  expect(page.props.children.props.filters).toEqual({ month: "2024-03", employeeId: id });
+});
+
+it("redirects when SQL authorization is revoked after the profile check", async () => {
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: null, error: { code: "42501" } }) });
+  await expect(Home()).rejects.toMatchObject({ digest: "NEXT_REDIRECT;replace;/access-denied;307;" });
+});
+
+it("passes the chart failure independently to the protected Summary panel", async () => {
+  const page = await Home();
+  expect(page.props.children.props.chart).toEqual({ status: "unavailable" });
+});
+
+it("rejects access if authorization is revoked during a previous-month read", async () => {
+  const counts = { attended: 2, locked: 1, kickstand: 1, repositioned: 1, invalid: 1 };
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: {
+    month: "2024-10-01", today: "2026-10-08", generated_at: "2026-10-08T12:00:00Z", employee_id: null,
+    month_metrics: counts, today_metrics: counts,
+  }, error: null }) });
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: [], error: null }) });
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: null, error: null }) }); // table response, independent from chart
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: null, error: { code: "42501" } }) });
+  await expect(Home({ searchParams: Promise.resolve({ month: "2024-10" }) })).rejects.toMatchObject({ digest: "NEXT_REDIRECT;replace;/access-denied;307;" });
+});
+
+
+it("passes the same filters to the table RPC and keeps a table failure independent", async () => {
+  const id = "00000000-0000-4000-8000-000000009102";
+  const page = await Home({ searchParams: Promise.resolve({ month: "2024-03", employee: id }) });
+  expect(sdk.rpc).toHaveBeenCalledWith("read_team_summary_by_collaborator", { p_month: "2024-03-01", p_employee_id: id });
+  expect(page.props.children.props.activity).toEqual({ status: "unavailable" });
+});
+it("redirects if the collaborator table read rejects authorization", async () => {
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: null, error: null }) });
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: [], error: null }) });
+  sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: null, error: { code: "42501" } }) });
+  await expect(Home()).rejects.toMatchObject({ digest: "NEXT_REDIRECT;replace;/access-denied;307;" });
 });
