@@ -5,10 +5,10 @@ Base de trabajo reportada por Jersson: `feat/web-foundation`, commit `26b0a9d` p
 
 ## Estado y siguiente paso
 
-Propuesta preparada para revisión y aprobación de migración. No aplicada en Supabase.
-Revisión estática y comprobación de aplicación del parche realizadas. No se han ejecutado
-las pruebas SQL: este entorno no dispone de PostgreSQL ni credenciales del proyecto.
-La validación efectiva se realizará en SQL Editor después de aprobar la migración.
+Migración aprobada y aplicada por Jersson en Supabase el 11 de octubre de 2026.
+Las pruebas completas se ejecutaron en SQL Editor y Jersson confirmó el resultado OK.
+La corrección de precedencia de la prueba de paginación está incluida y validada.
+Checkpoint SQL confirmado: `5a3def0`. El entorno de preparación no tiene acceso remoto.
 
 Este bloque solo añade lectura del listado y pruebas. No modifica la vista web,
 Resumen, la app móvil, datos existentes, tablas, RLS ni políticas de Storage.
@@ -108,4 +108,4 @@ Se agrupan entre paréntesis las tres extracciones `page->'items'` antes de conc
 con `||`. Ambos operadores tienen la misma precedencia y se asocian a izquierda.
 La expresión anterior no unía las tres páginas y generaba un falso fallo al contar
 IDs distintos. Se mantienen total, tamaño, orden, corte y ausencia de solapamiento.
-No se cambia la migración aplicada. Pendiente reejecución del script en Supabase.
+No se cambia la migración aplicada. La reejecución completa en Supabase dio OK, confirmada por Jersson.

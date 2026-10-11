@@ -20,7 +20,7 @@ function NavigationIcon({ page }: { page: Page }) {
   );
 }
 
-export function DashboardShell({ page, fullName, children, summaryInstant }: { page: Page; fullName: string; children?: ReactNode; summaryInstant?: string }) {
+export function DashboardShell({ page, fullName, children, summaryInstant, activityInstant }: { page: Page; fullName: string; children?: ReactNode; summaryInstant?: string; activityInstant?: string }) {
   const { t, i18n } = useTranslation();
   const firstName = fullName.trim().split(/\s+/)[0];
   const initials = fullName.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
@@ -56,9 +56,10 @@ export function DashboardShell({ page, fullName, children, summaryInstant }: { p
             ))}
           </div>
         </div>
-        {page === "summary" ? <SummaryHero name={firstName} instant={summaryInstant} /> : <header className="dashboard-heading">
+        {page === "summary" ? <SummaryHero name={firstName} instant={summaryInstant} /> : <header className="dashboard-heading dashboard-heading--activity">
           <h1>{t("activity")}</h1>
           <p className="dashboard-tagline">{t("activityTagline")}</p>
+          {activityInstant && <p className="activity-heading-date">{new Intl.DateTimeFormat(i18n.language === "en" ? "en-IE" : "es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Dublin" }).format(new Date(activityInstant))}</p>}
         </header>}
         {children ?? <section className="dashboard-placeholder" aria-labelledby="pending-heading">
           <span className="dashboard-placeholder-icon"><NavigationIcon page={page} /></span>

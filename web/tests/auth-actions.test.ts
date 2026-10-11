@@ -138,3 +138,19 @@ it("redirects if the collaborator table read rejects authorization", async () =>
   sdk.rpc.mockReturnValueOnce({ abortSignal: vi.fn().mockResolvedValue({ data: null, error: { code: "42501" } }) });
   await expect(Home()).rejects.toMatchObject({ digest: "NEXT_REDIRECT;replace;/access-denied;307;" });
 });
+
+
+it("rejects malformed Activity filters after verifying identity and before RPC reads", async () => {
+  const page=await Activity({searchParams:Promise.resolve({date:"2026-02-30"})});
+  expect(page.props.children.props.filters).toBeNull();expect(sdk.rpc).not.toHaveBeenCalled();
+});
+it("passes the complete Activity filters to the SQL list and keeps genuine errors explicit", async () => {
+  const id="00000000-0000-4000-8000-000000009402";
+  const page=await Activity({searchParams:Promise.resolve({view:"month",date:"2024-03-01",employee:id,q:"h02911",validity:"invalid"})});
+  expect(sdk.rpc).toHaveBeenCalledWith("read_team_activity",{p_view:"month",p_date:"2024-03-01",p_employee_id:id,p_bike_query:"H02911",p_validity:"invalid",p_offset:0,p_as_of:null});
+  expect(page.props.children.props.result).toEqual({status:"unavailable"});
+});
+it("rejects access when activity permission is revoked during the list read", async () => {
+  sdk.rpc.mockReturnValueOnce({abortSignal:vi.fn().mockResolvedValue({data:null,error:{code:"42501"}})});
+  await expect(Activity()).rejects.toMatchObject({digest:"NEXT_REDIRECT;replace;/access-denied;307;"});
+});

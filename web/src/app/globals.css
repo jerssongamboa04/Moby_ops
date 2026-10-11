@@ -180,6 +180,59 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+
+/* Activity list and controls, matching the approved platform reference. */
+.dashboard-heading--activity { margin: 24px 0 22px; }
+.activity-heading-date { margin: 8px 0 0; color: #444944; font-size: 16px; }
+.activity-heading-date::first-letter { text-transform: uppercase; }
+.activity-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 24px; }
+.activity-search { display: flex; align-items: center; width: 336px; min-height: 46px; border: 1px solid var(--color-border); border-radius: 14px; background: #fff; }
+.activity-search:focus-within { outline: 2px solid #427614; outline-offset: 3px; }
+.activity-search button { display: grid; place-items: center; flex: 0 0 48px; height: 44px; border-radius: 12px; cursor: pointer; }
+.activity-search button:hover { background: var(--color-selected); }
+.activity-search input { min-width: 0; flex: 1; padding: 10px 12px 10px 0; font: inherit; font-size: 14px; outline: none; }
+.activity-search input::placeholder { color: #545763; opacity: 1; }
+.activity-person-field { width: 294px; }
+.activity-date-field { width: 264px; }
+.activity-validity-field { width: 208px; }
+.activity-date-mode { display: flex; padding: 3px; margin-bottom: 12px; border-radius: 12px; background: #f1f3ed; }
+.activity-date-mode button { flex: 1; min-height: 34px; border-radius: 10px; cursor: pointer; font-size: 13px; }
+.activity-date-mode button[aria-pressed="true"] { background: var(--color-neon); font-weight: 600; }
+.activity-calendar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.activity-weekday { text-align: center; padding: 4px 0 8px; font-size: 11px; color: var(--color-muted); }
+.activity-calendar button { min-height: 34px; border-radius: 10px; font-size: 13px; cursor: pointer; }
+.activity-calendar button:hover:not(:disabled) { background: var(--color-selected); }
+.activity-calendar button[aria-pressed="true"] { background: var(--color-neon); font-weight: 600; }
+.activity-calendar-today { display: block; padding: 8px 12px; margin: 10px auto 0; border-radius: 10px; font-size: 13px; cursor: pointer; }
+.activity-calendar-today:hover { background: var(--color-selected); }
+.activity-list-card { padding: 16px 14px 14px; border: 1px solid var(--color-border); border-radius: 16px; background: #fff; box-shadow: 0 2px 8px #09090904; }
+.activity-list-card h2 { margin: 0 6px; font-size: 25px; font-weight: 800; letter-spacing: -.04em; line-height: 1.25; }
+.activity-records { margin: 2px 6px 20px; color: #545763; font-size: 14px; }
+.activity-table-scroll { overflow-x: auto; border-radius: 10px; }
+.activity-table-scroll:focus-visible { outline: 2px solid #427614; outline-offset: 3px; }
+.activity-table { width: 100%; min-width: 620px; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+.activity-table thead th { text-align: left; color: #545763; font-weight: 500; font-size: 13px; padding: 8px 12px; border-bottom: 1px solid #e5e8e3; }
+.activity-table tbody td, .activity-table tbody th { padding: 14px 12px; border-bottom: 1px solid #e5e8e3; text-align: left; font-weight: 400; }
+.activity-table time { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.activity-table tbody td:nth-child(2) { max-width: 250px; overflow-wrap: anywhere; }
+.activity-action-icons { display: flex; align-items: center; gap: 18px; }
+.activity-action-icon { width: 23px; height: 23px; flex-shrink: 0; }
+.activity-kickstand-icon { width: 29px; height: 29px; }
+.activity-status { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px; background: #eefbcf; color: #164e14; font-size: 13px; white-space: nowrap; }
+.activity-status > span { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #137617; color: #fff; font-size: 13px; font-weight: 700; }
+.activity-status--invalid { background: #fde6e9; color: var(--color-danger); }
+.activity-status--invalid > span { background: var(--color-danger); }
+.activity-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 6px 4px; color: #545763; font-size: 14px; }
+.activity-pagination p { margin: 0; }
+.activity-pagination > div { display: flex; gap: 8px; }
+.activity-pagination button { display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 8px 14px; border: 1px solid var(--color-border); border-radius: 10px; cursor: pointer; font: inherit; }
+.activity-pagination button:hover:not(:disabled) { background: var(--color-selected); }
+.activity-pagination button:disabled { background: #f7f8f9; color: #969daa; cursor: default; }
+.activity-error { margin: 12px 6px; color: var(--color-danger); font-size: 14px; }
+.activity-empty { margin: 20px 6px; color: var(--color-muted); font-size: 14px; }
+@media (max-width: 760px) { .activity-controls { gap: 10px; } .activity-search { width: 100%; } }
+@media (max-width: 540px) { .activity-controls .summary-picker { width: 100%; } .activity-pagination > div { width: 100%; justify-content: flex-end; } }
+
 /* Activity by collaborator: approved Summary table, below the real metric cards. */
 .summary-collaborator-card { margin-top: 18px; padding: 12px 10px 6px; border: 1px solid var(--color-border); border-radius: 16px; background: #fff; box-shadow: 0 2px 8px #09090904; }
 .summary-collaborator-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 0 10px 8px; }

@@ -1,5 +1,11 @@
 export const resources = {
   es: { translation: {
+    activityFilters: "Filtros de actividad", activitySearch: "Buscar ID de bicicleta", activitySearchSubmit: "Buscar", activitySearchError: "Revisa la búsqueda e inténtalo de nuevo.",
+    activityDate: "Fecha", activityDay: "Día", activityPreviousMonth: "Mes anterior", activityNextMonth: "Mes siguiente",
+    activityValidity: "Validez", activityValidity_all: "Todas", activityValidity_valid: "Válidas", activityValidity_invalid: "Inválidas", activityValid: "Válida", activityInvalid: "Inválida",
+    activityTodayTitle: "Actuaciones de hoy", activityPeriodTitle: "Actuaciones · {{period}}", activityRecords_one: "{{count}} registro", activityRecords_other: "{{count}} registros",
+    activityTime: "Hora", activityDateTime: "Fecha y hora", activityBike: "Bicicleta", activityActions: "Acciones", activityPrevious: "Anterior", activityNext: "Siguiente", activityRange: "{{from}}–{{to}} de {{total}}",
+    activityLoadError: "No se pudo cargar la actividad. Pulsa Actualizar para reintentar.", activityEmpty: "No hay actuaciones para estos filtros.", activityEmptyPage: "Esta página no contiene actuaciones. Vuelve a la anterior o pulsa Actualizar.",
     collaboratorActivityTitle: "Actividad por colaborador", collaboratorAttended: "Atendidas", collaboratorTotal: "Total",
     collaboratorActivityError: "No se pudo cargar la actividad por colaborador. Pulsa Actualizar para reintentar.",
     collaboratorActivityEmpty: "No hay colaboradores disponibles para este periodo.",
@@ -36,6 +42,12 @@ export const resources = {
     configurationError: "La conexión de esta web aún no está configurada.", retry: "Reintentar",
   } },
   en: { translation: {
+    activityFilters: "Activity filters", activitySearch: "Search bicycle ID", activitySearchSubmit: "Search", activitySearchError: "Check the search and try again.",
+    activityDate: "Date", activityDay: "Day", activityPreviousMonth: "Previous month", activityNextMonth: "Next month",
+    activityValidity: "Validity", activityValidity_all: "All", activityValidity_valid: "Valid actions", activityValidity_invalid: "Invalid actions", activityValid: "Valid", activityInvalid: "Invalid",
+    activityTodayTitle: "Today's actions", activityPeriodTitle: "Actions · {{period}}", activityRecords_one: "{{count}} record", activityRecords_other: "{{count}} records",
+    activityTime: "Time", activityDateTime: "Date and time", activityBike: "Bicycle", activityActions: "Actions", activityPrevious: "Previous", activityNext: "Next", activityRange: "{{from}}–{{to}} of {{total}}",
+    activityLoadError: "Unable to load activity. Select Refresh to retry.", activityEmpty: "No actions match these filters.", activityEmptyPage: "No actions on this page. Go back or select Refresh.",
     collaboratorActivityTitle: "Activity by collaborator", collaboratorAttended: "Attended", collaboratorTotal: "Total",
     collaboratorActivityError: "Unable to load activity by collaborator. Select Refresh to retry.",
     collaboratorActivityEmpty: "No collaborators available for this period.",
