@@ -48,11 +48,12 @@ describe("dashboard navigation and language", () => {
     const view = renderHome();
     await user.click(screen.getByRole("button", { name: "Inglés" }));
     view.rerender(<LocaleProvider><DashboardShell page="activity" fullName="Jersson Gamboa" /></LocaleProvider>);
-    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Activity");
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Every action, with its evidence.");
     const nav = screen.getByRole("navigation", { name: "Main navigation" });
     expect(within(nav).getByRole("link", { name: "Activity" }).getAttribute("aria-current")).toBe("page");
     expect(within(nav).getByRole("link", { name: "Summary" }).hasAttribute("aria-current")).toBe(false);
     expect(document.documentElement.lang).toBe("en");
+    expect(screen.queryByRole("group", { name: "Language" })).toBeNull();
   });
 
   it("does not share locale between independent application instances", async () => {
@@ -63,4 +64,15 @@ describe("dashboard navigation and language", () => {
     renderHome();
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Hola, Jersson");
   });
+});
+it("does not render a language selector in Activity", () => {
+  render(<LocaleProvider><DashboardShell page="activity" fullName="Jersson Gamboa" /></LocaleProvider>);
+  expect(screen.queryByRole("group", { name: "Idioma" })).toBeNull();
+});
+
+it("preserves the current Activity copy and Dublin date", () => {
+  render(<LocaleProvider><DashboardShell page="activity" fullName="Jersson Gamboa" activityInstant="2026-10-11T23:30:00Z" /></LocaleProvider>);
+  expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Cada actuación, con su evidencia.");
+  expect(screen.getByText("Cada actuación, con su evidencia.")).toBeTruthy();
+  expect(screen.getByText(/lunes, 12 de octubre de 2026/)).toBeTruthy();
 });

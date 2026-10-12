@@ -30,7 +30,7 @@ describe("approved summary welcome", () => {
   });
   it("does not replace Activity's heading with Summary's hero", () => {
     view("activity");
-    expect(screen.getByRole("heading", { level: 1, name: "Actividad" })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 1, name: "Cada actuación, con su evidencia." })).toBeTruthy();
     expect(screen.queryByText("Jueves, 8 de octubre de 2026")).toBeNull();
   });
 });

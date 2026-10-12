@@ -49,8 +49,8 @@ it("keeps errors separate from real empty data",()=>{
   ui.rerender(<LocaleProvider><ActivityPanel {...props} result={{status:"ready",data:{...data,total:0,valid:0,items:[]}}}/></LocaleProvider>);
   expect(screen.queryByRole("alert")).toBeNull();expect(screen.getByText("No hay actuaciones para estos filtros.")).toBeTruthy();
 });
-it("translates dates, columns and status with the shared language selector",async()=>{
-  const user=userEvent.setup();view();await user.click(screen.getByRole("button",{name:"Inglés"}));expect(screen.getByRole("table",{name:"Today's actions"})).toBeTruthy();expect(screen.getByText("Valid")).toBeTruthy();expect(screen.getByRole("button",{name:/^Date: Today/})).toBeTruthy();
+it("uses the language selected in Summary for dates, columns and status",async()=>{
+  const user=userEvent.setup();const ui=render(<LocaleProvider><DashboardShell page="summary" fullName="Jersson" /></LocaleProvider>);await user.click(screen.getByRole("button",{name:"Inglés"}));ui.rerender(<LocaleProvider><DashboardShell page="activity" fullName="Jersson"><ActivityPanel {...props}/></DashboardShell></LocaleProvider>);expect(screen.getByRole("table",{name:"Today's actions"})).toBeTruthy();expect(screen.getByText("Valid")).toBeTruthy();expect(screen.getByRole("button",{name:/^Date: Today/})).toBeTruthy();
 });
 
 it("marks repeated submissions as invalid and shows an empty page without inventing its range",()=>{
