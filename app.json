@@ -4,22 +4,27 @@
     "slug": "moby_ops",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/brand/moby-app-icon.png",
     "scheme": "mobyops",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "CFBundleLocalizations": [
+          "en",
+          "es"
+        ]
+      }
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "predictiveBackGestureEnabled": false,
+      "package": "com.jersson04.mobyops",
+      "icon": "./assets/brand/moby-app-icon.png"
     },
     "web": {
       "output": "static",
@@ -30,12 +35,33 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "image": "./assets/brand/moby-splash-logo.png",
+          "imageWidth": 240,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#D1FF00",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#D1FF00",
+            "image": "./assets/brand/moby-splash-logo.png"
+          },
+          "android": {
+            "image": "./assets/brand/moby-splash-logo.png",
+            "backgroundColor": "#D1FF00",
+            "resizeMode": "contain",
+            "imageWidth": 180,
+            "dark": {
+              "image": "./assets/brand/moby-splash-logo.png",
+              "backgroundColor": "#D1FF00"
+            }
+          },
+          "ios": {
+            "image": "./assets/brand/moby-splash-logo.png",
+            "backgroundColor": "#D1FF00",
+            "resizeMode": "contain",
+            "imageWidth": 240,
+            "dark": {
+              "image": "./assets/brand/moby-splash-logo.png",
+              "backgroundColor": "#D1FF00"
+            }
           }
         }
       ],
@@ -54,11 +80,45 @@
           }
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "expo-secure-store",
+      "expo-font",
+      "expo-image",
+      "expo-web-browser",
+      "expo-status-bar",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow MOBY Ops to take evidence photos and scan bicycle codes.",
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": true
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow MOBY Ops to record the location of your Public Order action.",
+          "isIosBackgroundLocationEnabled": false,
+          "isAndroidBackgroundLocationEnabled": false,
+          "isAndroidForegroundServiceEnabled": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b404e1b1-ed28-4f07-a703-5f3d98cce1da"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b404e1b1-ed28-4f07-a703-5f3d98cce1da"
+    },
+    "runtimeVersion": {
+      "policy": "fingerprint"
     }
   }
 }

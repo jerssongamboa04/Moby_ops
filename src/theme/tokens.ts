@@ -6,6 +6,11 @@ export const colors = {
   mist: '#EBEBEB',
   white: '#FFFFFF',
   coral: '#FF9064',
+  muted: '#58605A',
+  border: '#D8DED7',
+  canvas: '#F2F4EF',
+  selected: '#F3F9DB',
+  danger: '#A32D32',
 } as const;
 
 export const spacing = {
