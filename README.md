@@ -8,6 +8,15 @@ la web permite consultar la actividad del equipo con datos reales.
 (commit de integración `38496c2`, implementación responsive `a8b8037`).
 [Web desplegada](https://moby-ops-web.vercel.app).
 
+## La aplicación desplegada
+
+Captura real del dashboard web, 14 de octubre de 2026. Los valores corresponden
+al entorno con datos de demostración, no a productividad operativa.
+
+![Summary: filtros, gráfica e indicadores mensuales](docs/screenshots/web/summary-desktop.jpg)
+
+[Ver las capturas actuales y su contexto](docs/current-app-views.md).
+
 ## Qué incluye
 
 - **Móvil:** invitación, configuración de contraseña, acceso, Public Order con

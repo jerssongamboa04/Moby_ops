@@ -7,6 +7,13 @@ i18next y Supabase SSR. La gráfica implementada es SVG; no utiliza Recharts.
 Estado: `main` tras PR #4, 14 de octubre de 2026. Summary y Activity están
 conectados a datos reales y adaptados a móvil; no son pantallas provisionales.
 
+## Vistas actuales
+
+Capturas reales de la versión desplegada el 14 de octubre de 2026, con datos
+de demostración. [Galería y contexto](../docs/current-app-views.md).
+
+![Activity: filtros y listado mensual con validez](../docs/screenshots/web/activity-desktop.jpg)
+
 ## Ejecutar
 
 Desde `web/`, con Node `^22.12.0 || ^24.0.0`:

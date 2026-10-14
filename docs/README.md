@@ -15,6 +15,7 @@ sus límites; no certifica el estado de una instancia Supabase distinta.
 | Entender acceso, evidencias y límites | [Seguridad](security.md) |
 | Elegir qué validar y qué no acredita cada prueba | [Pruebas](testing.md) |
 | Desplegar, identificar versión y diagnosticar | [Operación](deployment.md) |
+| Ver la interfaz desplegada y el contexto de las capturas | [Vistas actuales](current-app-views.md) |
 | Entender comportamiento actual del dashboard | [Plataforma web](web-platform.md) |
 
 ## Detalle técnico por vertical
