@@ -13,13 +13,52 @@ const data = { month: "2024-03-01", rows: [
   { id: "00000000-0000-4000-8000-000000009103", full_name: "Luis", is_active: false, metrics: zero },
 ], total_metrics: counts };
 describe("approved collaborator activity table", () => {
+  it("expands and collapses a collaborator with a real button and controlled metric cells", async () => {
+    const user = userEvent.setup();
+    render(<LocaleProvider><SummaryCollaboratorTable result={{ status: "ready", data }} /></LocaleProvider>);
+    const toggle = screen.getByRole("button", { name: "Ver tareas de Ana Pérez" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    const controls = toggle.getAttribute("aria-controls")!.split(" ");
+    expect(controls).toHaveLength(4);
+    controls.forEach((id) => expect(document.getElementById(id)).toBeTruthy());
+    await user.click(toggle);
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(toggle.closest("tr")?.getAttribute("data-expanded")).toBe("true");
+    expect(screen.getByRole("button", { name: "Ver tareas de Luis" }).getAttribute("aria-expanded")).toBe("false");
+    await user.keyboard(" ");
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(toggle.closest("tr")?.getAttribute("data-expanded")).toBe("false");
+  });
+  it("keeps the team total outside the disclosures and starts a different month collapsed", async () => {
+    const user = userEvent.setup();
+    const view = render(<LocaleProvider><SummaryCollaboratorTable result={{ status: "ready", data }} /></LocaleProvider>);
+    await user.click(screen.getByRole("button", { name: "Ver tareas de Ana Pérez" }));
+    const total = screen.getAllByRole("row").at(-1)!;
+    expect(within(total).queryByRole("button")).toBeNull();
+    expect(within(total).getAllByRole("cell")).toHaveLength(5);
+    view.rerender(<LocaleProvider><SummaryCollaboratorTable result={{ status: "ready", data: { ...data, month: "2024-04-01" } }} /></LocaleProvider>);
+    expect(screen.getByRole("button", { name: "Ver tareas de Ana Pérez" }).getAttribute("aria-expanded")).toBe("false");
+  });
+  it("provides labeled mobile metrics and original task icons for every collaborator and the total", () => {
+    render(<LocaleProvider><SummaryCollaboratorTable result={{ status: "ready", data }} /></LocaleProvider>);
+    const rows = screen.getAllByRole("row").slice(1);
+    for (const row of rows) {
+      const cells = within(row).getAllByRole("cell");
+      expect(within(cells[0]).getByText("Atendidas")).toBeTruthy();
+      expect(within(cells[1]).getByText("Candados")).toBeTruthy();
+      expect(within(cells[2]).getByText("Pata puesta")).toBeTruthy();
+      expect(within(cells[3]).getByText("Reubicadas")).toBeTruthy();
+      expect(within(cells[4]).getByText("Inválidas")).toBeTruthy();
+      expect(cells[2].querySelector('[style*="kickstand.svg"]')).toBeTruthy();
+    }
+  });
   it("shows names, five counts, a genuine zero row and the server total without mixing invalid actions", () => {
     render(<LocaleProvider><SummaryCollaboratorTable result={{ status: "ready", data }} /></LocaleProvider>);
     const table = screen.getByRole("table", { name: "Actividad por colaborador Marzo 2024" });
     const rows = within(table).getAllByRole("row");
-    expect(within(rows[1]).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["3", "2", "1", "0", "2"]);
-    expect(within(rows[2]).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["0", "0", "0", "0", "0"]);
-    expect(within(rows[3]).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["3", "2", "1", "0", "2"]);
+    expect(within(rows[1]).getAllByRole("cell").map((cell) => within(cell).getByText(/^\d+$/).textContent)).toEqual(["3", "2", "1", "0", "2"]);
+    expect(within(rows[2]).getAllByRole("cell").map((cell) => within(cell).getByText(/^\d+$/).textContent)).toEqual(["0", "0", "0", "0", "0"]);
+    expect(within(rows[3]).getAllByRole("cell").map((cell) => within(cell).getByText(/^\d+$/).textContent)).toEqual(["3", "2", "1", "0", "2"]);
     expect(within(rows[1]).getByRole("rowheader", { name: "Ana Pérez" })).toBeTruthy();
     expect(within(rows[2]).getByRole("rowheader", { name: "Luis Inactivo" })).toBeTruthy();
     expect(screen.getByText("AP").getAttribute("aria-hidden")).toBe("true");
@@ -45,6 +84,10 @@ describe("approved collaborator activity table", () => {
     expect(screen.getByRole("table", { name: "Activity by collaborator March 2024" })).toBeTruthy();
     expect(screen.getByRole("columnheader", { name: "Kickstand positioned" })).toBeTruthy();
     expect(screen.getByRole("rowheader", { name: "Luis Inactive" })).toBeTruthy();
+    const cells = within(screen.getAllByRole("row")[1]).getAllByRole("cell");
+    expect(within(cells[2]).getByText("Kickstand")).toBeTruthy();
+    expect(within(cells[3]).getByText("Repositioned")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "View tasks for Ana Pérez" })).toBeTruthy();
   });
   it("keeps a failed table below working cards and uses the single existing refresh", () => {
     render(<LocaleProvider><SummaryPanel filters={{ month: "2024-03", employeeId: null }} currentMonth="2026-10"
