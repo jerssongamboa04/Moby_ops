@@ -17,8 +17,9 @@ export function SummaryMetrics({ result }: { result: SummaryResult }) {
     {data ? <>
       <div className="summary-metrics-grid">{metrics.map(({ key, icon }) => <article key={key} className="summary-metric" aria-labelledby={`metric-${key}`}>
         <span className="summary-metric-symbol" aria-hidden="true"><span className="metrics-icon" style={{ maskImage: `url(/icons/${icon}.svg)` }} /></span>
-        <div><h3 id={`metric-${key}`}>{t(`metric_${key}`)}</h3><p className="summary-metric-total">{new Intl.NumberFormat(locale).format(data.month_metrics[key])}</p>
-          <p className="summary-metric-today">{t("metricsToday")} <strong>{new Intl.NumberFormat(locale).format(data.today_metrics[key])}</strong></p></div>
+        <div className="summary-metric-content"><h3 id={`metric-${key}`} aria-label={t(`metric_${key}`)}>{key === "attended" ? <><span className="summary-metric-label-desktop">{t(`metric_${key}`)}</span><span className="summary-metric-label-mobile">{t("metricsAttendedShort")}</span></> : t(`metric_${key}`)}</h3><p className="summary-metric-total">{new Intl.NumberFormat(locale).format(data.month_metrics[key])}</p>
+          <p className="summary-metric-period">{t(data.month.slice(0, 7) === data.today.slice(0, 7) ? "metricsThisMonth" : "metricsSelectedMonth")}</p>
+          <p className="summary-metric-today"><span>{t("metricsToday")}</span> <strong>{new Intl.NumberFormat(locale).format(data.today_metrics[key])}</strong></p></div>
       </article>)}</div>
     </> : <p className="metrics-error" role="alert">{t(result.status === "denied" ? "deniedError" : "metricsError")}</p>}
   </section>;

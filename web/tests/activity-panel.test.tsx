@@ -13,6 +13,38 @@ const data={as_of:"2026-10-11T12:00:00+00:00",total:1,valid:1,invalid:0,has_more
 const props={filters,today:filters.date,result:{status:"ready" as const,data},collaborators:{status:"ready" as const,data:[{id,full_name:"Ana",is_active:true}]}};
 beforeEach(()=>vi.clearAllMocks());
 function view(){return render(<LocaleProvider><DashboardShell page="activity" fullName="Jersson"><ActivityPanel {...props}/></DashboardShell></LocaleProvider>);}
+it("toggles performed tasks independently with keyboard support and resets for a new period",async()=>{
+  const user=userEvent.setup();
+  const second={...item,id:"00000000-0000-4000-8000-000000008408",bike_external_id:"39E9900404",counted:false};
+  const result={status:"ready" as const,data:{...data,total:2,items:[item,second]}};
+  const ui=render(<LocaleProvider><ActivityPanel {...props} result={result}/></LocaleProvider>);
+  const toggle=screen.getByRole("button",{name:"Ver tareas de IE12H02911"});
+  expect(toggle.getAttribute("aria-expanded")).toBe("false");
+  const controlled=toggle.getAttribute("aria-controls")!.split(" ");
+  expect(controlled).toHaveLength(2);
+  controlled.forEach(id=>expect(document.getElementById(id)).toBeTruthy());
+  await user.click(toggle);
+  expect(toggle.getAttribute("aria-expanded")).toBe("true");
+  expect(toggle.closest("tr")?.getAttribute("data-expanded")).toBe("true");
+  expect(screen.getByRole("button",{name:"Ver tareas de 39E9900404"}).getAttribute("aria-expanded")).toBe("false");
+  await user.keyboard("{Enter}");
+  expect(toggle.getAttribute("aria-expanded")).toBe("false");
+  await user.click(toggle);
+  ui.rerender(<LocaleProvider><ActivityPanel {...props} filters={{...filters,view:"month",date:"2026-10-01"}} result={result}/></LocaleProvider>);
+  expect(screen.getByRole("button",{name:"Ver tareas de IE12H02911"}).getAttribute("aria-expanded")).toBe("false");
+});
+it("provides readable task labels and a detail action with full month row identity",()=>{
+  render(<LocaleProvider><ActivityPanel {...props} filters={{...filters,view:"month",date:"2026-10-01"}} result={{status:"ready",data:{...data,valid:0,invalid:1,items:[{...item,full_name:"Ana Pérez González",counted:false,bike_repositioned:true}]}}}/></LocaleProvider>);
+  const row=within(screen.getByRole("table")).getAllByRole("row")[1];
+  expect(within(row).getByText("Ana Pérez González")).toBeTruthy();
+  expect(within(row).getByText("11 oct, 11:00")).toBeTruthy();
+  expect(within(row).getByText("Candado")).toBeTruthy();
+  expect(within(row).getByText("Pata puesta")).toBeTruthy();
+  expect(within(row).getByText("Reubicada")).toBeTruthy();
+  expect(within(row).getByText("Inválida")).toBeTruthy();
+  expect(within(row).getByText("Ver detalle")).toBeTruthy();
+  expect(within(row).getAllByRole("button",{name:"Ver detalle de IE12H02911"})).toHaveLength(2);
+});
 it("shows real rows, Dublin time, only performed actions and accessible valid status",()=>{
   view();const table=screen.getByRole("table",{name:"Actuaciones de hoy"});
   expect(within(table).getByText("11:00")).toBeTruthy();expect(within(table).getByText("IE12H02911")).toBeTruthy();

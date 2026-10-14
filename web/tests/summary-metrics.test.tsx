@@ -5,6 +5,15 @@ import { SummaryMetrics } from "../src/components/summary-metrics";
 import { LocaleProvider } from "../src/i18n/locale-provider";
 const data = { employee_id: null, month: "2026-10-01", today: "2026-10-08", generated_at: "2026-10-07T23:15:00+00:00", month_metrics: { attended: 10, locked: 8, kickstand: 6, repositioned: 4, invalid: 2 }, today_metrics: { attended: 3, locked: 2, kickstand: 1, repositioned: 0, invalid: 1 } };
 describe("real summary metric cards", () => {
+  it("labels the mobile period without confusing a selected historical month with today", () => {
+    const view = render(<LocaleProvider><SummaryMetrics result={{ status: "ready", data }} /></LocaleProvider>);
+    expect(screen.getAllByText("Este mes")).toHaveLength(4);
+    expect(screen.getByText("Atendidas")).toBeTruthy();
+    view.rerender(<LocaleProvider><SummaryMetrics result={{ status: "ready", data: { ...data, month: "2026-09-01" } }} /></LocaleProvider>);
+    expect(screen.getAllByText("Mes seleccionado")).toHaveLength(4);
+    expect(screen.queryByText("Este mes")).toBeNull();
+    expect(screen.getByRole("heading", { name: "Actividad de septiembre" })).toBeTruthy();
+  });
   it("shows monthly counts and today's counts separately, excluding invalid totals", () => {
     render(<LocaleProvider><SummaryMetrics result={{ status: "ready", data }} /></LocaleProvider>);
     expect(screen.getByRole("heading", { name: "Actividad de octubre" })).toBeTruthy();
@@ -33,5 +42,7 @@ describe("real summary metric cards", () => {
     expect(screen.getByRole("heading", { name: "October activity" })).toBeTruthy();
     expect(screen.getByText("Valid actions")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Kickstand positioned" })).toBeTruthy();
+    expect(screen.getAllByText("This month")).toHaveLength(4);
+    expect(screen.getByText("Attended")).toBeTruthy();
   });
 });
