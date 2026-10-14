@@ -26,15 +26,13 @@ Inválidas usa X en círculo. Etiquetas ES/EN; nombres largos y cifras pueden
 envolver texto. Botón de cabecera de al menos 44 px. Rotación del chevron y
 aparición de métricas en 180 ms, desactivadas con prefers-reduced-motion.
 
-Base de integración: opción 2 ya aplicada junto con el menú móvil y tarjeta
-personal. El parche actual transforma esa versión; no hay que revertirla.
+## Integración y validación
 
-TDD: dos pruebas rojas por botón ausente, implementación verde. Verifica
-abrir/cerrar, activación por teclado, IDs controlados, apertura independiente,
-cambio de mes y total siempre fuera del despliegue. Se ejecutan suite completa,
-lint, TypeScript y build. QA geométrica pendiente en Safari/Chrome: 320, 390,
-430 px, orientación horizontal, nombres largos, cifras grandes, idiomas y PC.
-Las pruebas DOM no sustituyen una comprobación real de CSS en navegador.
+Integrado en PR #4 (`38496c2`); no requiere aplicar parches adicionales al clonar.
+Pruebas de componente cubren abrir/cerrar, teclado, controles relacionados,
+apertura independiente, cambio de mes y total fuera del despliegue. El checkpoint
+conjunto responsive pasó 218 pruebas web y CI. La revisión local fue comunicada
+por Jersson; no existe una matriz E2E que acredite cada navegador/anchura.
 
-Integrar en fix/web-mobile-responsive antes de commit y PR, junto al resto de
-ajustes móviles. El parche no realiza commit, push ni despliegue.
+Revisar regresiones con nombres largos, cifras grandes, ES/EN, filas simultáneas
+ y PC. [Marco responsive](web-mobile-responsive.md) · [Pruebas](testing.md).

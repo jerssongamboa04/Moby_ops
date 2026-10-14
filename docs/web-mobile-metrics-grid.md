@@ -25,15 +25,13 @@ etiquetas pasan debajo del icono para evitar columnas de texto estrechas.
 Números largos pueden envolver texto. Se conservan bicycle-outline.svg,
 lock-closed-outline.svg, kickstand.svg y move-outline.svg; no nuevos iconos.
 
-Base de integración: parches móviles, tarjeta personal y colaboradores con
-desplegables ya aplicados. Cambia componente, CSS, traducciones, prueba y este
-documento; no cambia Supabase, datos, autenticación ni dependencias.
+## Integración y validación
 
-TDD: prueba roja por subtítulos ausentes y verde con la implementación.
-Verifica mes actual frente a histórico, separación de cifras, ceros y ES/EN.
-Se ejecutan suite completa, lint, TypeScript y build. QA visual pendiente:
-Safari/Chrome a 320, 390 y 430 px, nombres de métricas en inglés, cifras grandes,
-mes histórico, zoom de texto y escritorio. Pruebas DOM no miden geometría.
+Integrado en PR #4 (`38496c2`), incluido el ajuste de fondo blanco uniforme.
+No aplicar el parche de énfasis individual sobre el código final. La prueba de
+periodo separa mes actual de histórico; se conservan pruebas de cifras mes/hoy,
+ceros y ES/EN. El checkpoint conjunto pasó 218 pruebas web y CI.
 
-Aplicar en fix/web-mobile-responsive para una sola integración con el resto
-de ajustes. El parche no realiza commit, push ni despliegue.
+Revisión local comunicada por Jersson; sin geometría automatizada por navegador.
+Comprobar 320/390/430 px, texto ampliado, etiquetas en inglés y cifras grandes.
+[Marco](web-mobile-responsive.md) · [Pruebas](testing.md).

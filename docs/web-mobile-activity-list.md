@@ -25,14 +25,15 @@ Nombres, fechas y chips pueden envolver texto; no se truncan campos ni se
 reduce la tabla a columnas parciales. Inválidas siguen con X y etiqueta roja.
 No cambia Supabase, datos, almacenamiento, autenticación o dependencias.
 
-TDD: prueba roja por botón ausente; verde con abrir/cerrar, teclado, controles
-relacionados, apertura independiente y cambio de periodo. Se mantienen pruebas
-de datos mensuales, tres acciones, estado y apertura del detalle. Suite completa,
-lint, TypeScript y build se ejecutan. QA visual pendiente en Safari/Chrome:
-320, 390 y 430 px, ES/EN, tres tareas, inválidas, nombres largos, detalle y PC.
-Pruebas DOM no comprueban geometría de CSS.
+## Integración y validación
 
-Integración: este parche final se aplica sobre Summary móvil terminado, antes
-del parche provisional de tarjetas de Activity. Sustituye aquel diseño pendiente.
-Si se aplicó el provisional, revertir únicamente ese parche antes de aplicar el
-final. No afecta a los ajustes de Summary. Misma rama fix/web-mobile-responsive.
+Integrado en PR #4 (`38496c2`). Estado local con apertura por actuación/periodo;
+no se necesitan parches de tarjetas previos al trabajar sobre main actual.
+TDD registrado por botón ausente; las pruebas cubren abrir/cerrar, teclado,
+controles relacionados, apertura independiente y cambio de periodo. Se conservan
+pruebas de datos, tareas, validez y panel. Checkpoint conjunto: 218 pruebas web,
+lint, TypeScript, build y CI correctos.
+
+Revisión local comunicada por Jersson. Pruebas DOM no miden geometría; comprobar
+regresiones en Safari/Chrome, ES/EN, tres tareas, inválidas y PC.
+[Marco](web-mobile-responsive.md) · [Pruebas](testing.md).
