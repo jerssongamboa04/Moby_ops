@@ -1,50 +1,90 @@
-# Welcome to your Expo app 👋
+# MOBY Ops
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Registro de operaciones de calle y revisión de evidencias para el equipo de MOBY
+en Dublín. Un empleado registra una actuación terminada sobre una bicicleta;
+la web permite consultar la actividad del equipo con datos reales.
 
-## Get started
+**Estado documentado:** 14 de octubre de 2026, `main` después del PR #4
+(commit de integración `38496c2`, implementación responsive `a8b8037`).
+[Web desplegada](https://moby-ops-web.vercel.app).
 
-1. Install dependencies
+## Qué incluye
 
-   ```bash
-   npm install
-   ```
+- **Móvil:** invitación, configuración de contraseña, acceso, Public Order con
+  escaneo/ID, candado, pata y reposicionamiento, fotos antes/después, ubicación
+  puntual y consulta de actuaciones propias. Interfaz ES/EN.
+- **Web:** acceso de supervisor activo, Summary con filtros, gráfica mensual,
+  métricas mes/hoy y colaboradores; Activity con búsqueda, paginación y detalle
+  de evidencia privada. Vistas de escritorio y móvil.
+- **Datos:** Supabase Auth, PostgreSQL y Storage privado. La validez se calcula
+  por empleado, bicicleta y día de Dublín; las repetidas se conservan aparte.
 
-2. Start the app
+La web es de consulta: no administra cuentas, no asigna tareas y no edita
+actuaciones. Manager es un uso de negocio: el esquema implementa `employee`
+y `supervisor`, no un tercer rol `manager`.
 
-   ```bash
-   npx expo start
-   ```
+## Un repositorio, dos proyectos
 
-In the output, you'll find options to open the app in a
+| Carpeta | Responsabilidad | Comandos desde |
+| --- | --- | --- |
+| `app/`, `src/`, `assets/` | Aplicación Expo / React Native | Raíz |
+| `web/` | Next.js App Router / React / Tailwind | `web/` |
+| `supabase/migrations/` | Esquema, funciones y políticas versionadas | Revisión SQL |
+| `supabase/tests/` | Comprobaciones de acceso e integridad SQL | Entorno de BD controlado |
+| `supabase/demo/` | Carga/retirada explícita de datos de demostración | Procedimiento separado |
+| `docs/` | Guías actuales, decisiones y registros técnicos | Lectura |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Cada proyecto tiene su `package.json` y lockfile. No hay npm workspaces.
+`npm run web` en la raíz ejecuta Expo Web; **el dashboard Next.js está en `web/`**.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Primer arranque
 
-## Get a fresh project
-
-When you're ready, run:
+Node 22 compatible con ambos proyectos; la web declara `^22.12.0 || ^24.0.0`.
+Instalar con los lockfiles, sin actualizar dependencias como parte del arranque.
+Las variables son del mismo proyecto Supabase, con nombres distintos por cliente.
 
 ```bash
-npm run reset-project
+# Móvil: desde la raíz
+npm ci
+cp .env.example .env
+# Editar .env con URL y publishable key
+npx expo start --dev-client
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+El flujo de enlaces y las capacidades nativas se validan con development build.
+Expo Go no sustituye esa validación; ver [desarrollo local](docs/development.md).
 
-## Learn more
+```bash
+# Dashboard web
+cd web
+npm ci
+cp .env.example .env.local
+# Editar .env.local antes de iniciar
+npm run dev
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+La cuenta debe existir en Auth y tener un perfil adecuado. Autenticarse no
+concede automáticamente acceso de supervisor. No crear perfiles ni ejecutar
+migraciones por el solo hecho de clonar el repositorio.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Dónde continuar
 
-## Join the community
+- [Índice de documentación](docs/README.md): ruta de lectura y estado de documentos.
+- [Arquitectura y datos](docs/architecture.md): límites, flujos y contratos.
+- [Decisiones](docs/decisions.md): contexto, alternativas y consecuencias.
+- [Desarrollo](docs/development.md), [pruebas](docs/testing.md) y
+  [seguridad](docs/security.md).
+- [Despliegue y diagnóstico](docs/deployment.md).
+- [Guía específica del dashboard](web/README.md).
 
-Join our community of developers creating universal apps.
+## Límites conocidos
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+No hay cola offline persistente, relación de equipos/organizaciones ni catálogo
+de flota. MFA y recuperación/invitación dentro de la web no están implementados.
+El circuito móvil de invitación/contraseña es independiente. La configuración
+EAS Update no acredita por sí sola recepción de OTA en todos los dispositivos.
+Una foto firmada puede seguir accesible hasta su caducidad. Véanse los límites
+explicados en las guías, antes de ampliar el uso operativo.
+
+Los datos demo no son productividad real. Mantenerlos identificados durante una
+presentación y seguir su [procedimiento](docs/dashboard-demo-data.md).

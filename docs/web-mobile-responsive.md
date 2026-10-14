@@ -1,82 +1,62 @@
-# Dashboard móvil — menú desplegable y composición compacta
+# Dashboard móvil: marco y decisiones responsive
 
-Fecha: 13 de octubre de 2026. Base: main después de la integración del PR #3,
-con commit funcional 7bbb807. Se verificaron los componentes y estilos de GitHub
-antes de editar; se conserva el tamaño local aprobado del icono kickstand.
+Estado integrado por PR #4 (`a8b8037` → `38496c2`), 14 de octubre de 2026.
+Esta es la guía actual del conjunto; cada bloque tiene su contrato específico.
 
-## Decisión aprobada
+## Problema y resultado
 
-Jersson elige la propuesta A: cabecera compacta con logo original y desplegable
-suave ajustado a las pantallas. Resumen, Actividad, idioma y Cerrar sesión quedan
-dentro del desplegable en móvil. El hero no incluye selector de idioma móvil.
-El diseño de escritorio conserva barra lateral y selector en Summary.
+La navegación y tablas de escritorio ocupaban demasiado alto/ancho en teléfono.
+Se eligió adaptar lectura y jerarquía manteniendo datos, filtros y autorización.
+El menú compacto permite que el contenido empiece antes; cuadrícula y desplegables
+alternan densidad visual sin perder cifras o acciones.
 
-Actualización aprobada: opción 3, tarjeta personal. El desplegable móvil reúne
-avatar de iniciales, nombre y rol existentes en una tarjeta oscura; debajo,
-ES/EN y Cerrar sesión comparten fila. Se elimina el rótulo visible Idioma,
-conservando su nombre accesible. Se reutilizan perfil y salida de escritorio,
-sin duplicar formularios ni datos. Nombres largos y errores pueden envolver
-texto; la tarjeta conserva su altura dentro del scroll del desplegable.
+## Marco y navegación
 
-## Implementación
+Breakpoint 760 px coherente con el marco existente. Header sticky con logo
+original de 104 px y botón de 44 px. Disclosure anclado bajo la cabecera, opacidad
+ y desplazamiento de 180 ms, con altura limitada por viewport/safe area y scroll
+interno. Reduced motion elimina transición. No desplaza el hero al abrirse.
 
-- Breakpoint de 760 px, coherente con la estructura existente. Cabecera sticky
-  con botón de 44 px y logo de 104 px. El menú flota bajo la cabecera, ajusta
-  altura al viewport dinámico y safe area y permite scroll interno en horizontal
-  o pantallas de poca altura. No desplaza el contenido al abrirse.
-- Disclosure accesible con aria-expanded/aria-controls, navegación semántica
-  y enlaces reales. Sin role=menu ni focus trap porque no es un diálogo modal.
-- Una misma navegación para móvil y PC. useSyncExternalStore sincroniza el
-  breakpoint con un snapshot de servidor estable para evitar discrepancias de
-  hidratación. Cerrado en móvil: aria-hidden e inert bloquean acceso/foco.
-- Cierra con el botón, al seleccionar sección, tocar fuera, mover foco fuera
-  y con Escape (recupera foco en el botón). Idioma ES/EN modifica el proveedor
-  existente y permanece seleccionado al cerrar. No se añade persistencia.
-- Opacidad y desplazamiento de 180 ms; sin transición cuando se solicita
-  prefers-reduced-motion. Conserva el logo e iconos y el rojo mate de salida.
-- Heroes compactos: saludo/título 28 px, fecha 13 px, skyline proporcional más
-  pequeño sin sustituirlo ni recortarlo. Ruta SVG de Activity contenida.
-- Filtros de Summary: colaborador a todo el ancho, mes y Actualizar en otra
-  fila. Popups con ancho y altura contenidos. Activity mantiene sus filtros
-  en columna. Inputs móviles a 16 px.
-- Gráfica: mismo cálculo y datos, SVG desktop de 900 unidades y SVG móvil de
-  360 unidades con meses abreviados. No se escalan las etiquetas desktop a un
-  tercio de su tamaño. Gradientes con IDs distintos por gráfico y variante.
-  Ambos SVG son decorativos; la única tabla accesible conserva todos los meses
-  completos, válidas e inválidas. Los totales siguen mostrando ambas categorías.
-- Tarjetas más compactas; tablas conservan desplazamiento horizontal local y
-  todas sus columnas. No se transforma el listado en tarjetas ni se elimina
-  información. Detalle de fotos con controles de 44 px, márgenes/safe area y
-  ubicación que puede envolver texto. Zoom/permisos/sign out sin cambios.
+Resumen y Actividad arriba; tarjeta personal con iniciales/nombre/rol existentes,
+ES/EN y salida en rojo mate debajo. Se elimina el rótulo visible Idioma, no su
+nombre accesible. Selector fuera del hero en móvil, dentro de Summary en PC.
 
-Sin dependencias, migraciones, cambios de Supabase, nuevos privilegios ni datos.
-Referencias oficiales: WAI APG disclosure navigation y documentación local de
-Next.js para client components.
-https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/
+Una navegación compartida. useSyncExternalStore escucha matchMedia con snapshot
+servidor estable. aria-expanded/controls y botón nativo; cerrado tiene inert y
+aria-hidden. No role=menu ni focus trap: es navegación disclosure, no diálogo.
+Cierra con botón, enlace, Escape, toque o foco fuera; Escape devuelve foco al botón.
+Idioma utiliza el proveedor existente, sin persistencia nueva añadida.
 
-## Validación
+## Composición de las vistas
 
-TDD: cuatro pruebas rojas por menú ausente/controles visibles indebidamente;
-implementación y cinco pruebas verdes de navegación móvil y conservación de PC.
-Una prueba adicional comprueba perfil, idioma y salida en la misma tarjeta,
-sin el rótulo redundante. Suite completa: 212 pruebas. Lint, TypeScript y build pasan. Parche comprobado
-sobre la base actual, manteniendo el tamaño del icono de la pata.
+| Bloque | Adaptación móvil | Lectura detallada |
+| --- | --- | --- |
+| Hero | Título 28 px, fecha 13 px, ilustración proporcional | Componentes existentes |
+| Filtros Summary | Persona a todo ancho; mes/Actualizar comparten fila | Filtros en URL |
+| Gráfica | SVG de 360 unidades, meses cortos, totales válidas/inválidas | Tabla accesible única |
+| Métricas | 2 × 2, blanco uniforme; Hoy en pie | [Cuadrícula](web-mobile-metrics-grid.md) |
+| Colaboradores | Identidad/atendidas visibles, cuatro métricas desplegables | [Colaboradores](web-mobile-collaborators.md) |
+| Activity | Identidad/fecha/validez visibles; tareas/detalle desplegables | [Actuaciones](web-mobile-activity-list.md) |
+| Evidencia | Márgenes/safe area, controles de 44 px, herramientas que envuelven | Panel y zoom existentes |
 
-No se ha realizado QA visual en navegador desde este entorno: la descarga del
-binario Chromium falló. La simulación de matchMedia comprueba interacción y
-accesibilidad DOM, no mide la geometría real ni sustituye la prueba en Safari.
+No se conservan las columnas fuera de pantalla como solución móvil. Las tablas
+usan roles y cabeceras mientras CSS adapta filas. En escritorio todas las
+métricas/acciones siguen visibles, sin botones de desplegar. No se duplica la
+consulta ni se añaden reglas de negocio para elegir tamaño de pantalla.
 
-Validar antes del commit: iPhone/Safari y Android/Chrome en 320, 390 y 430 px,
-orientación horizontal y teclado; menú corto, largo y cambio de idioma; filtros
-sobre datos reales; gráfica y totales; tabla sin scroll horizontal de toda la
-página; fotos, zoom y mapas. En PC a 1440 px comprobar fidelidad del diseño.
-Mantener los avisos de errores, las inválidas y la totalidad de las columnas.
+## Qué se verificó y qué falta medir
 
-## Integración
+PR #4 pasó CI y las 218 pruebas web del checkpoint; Jersson revisó localmente y
+dio por terminadas las vistas. Las pruebas DOM cubren interacción, no geometría.
+No hay matriz automatizada de navegadores ni un resultado documentado para cada
+anchura física. Revisar cambios posteriores en 320/390/430 px, ES/EN, nombres y
+cifras largas, orientación horizontal, texto ampliado, foco y vuelta del detalle.
+Comprobar PC para no degradar las tablas. [Estrategia](testing.md).
 
-Aplicar sobre la versión del hero y salida que ya está en main. Trabajar en una
-rama de corrección, por ejemplo fix/web-mobile-responsive, tras revisar el estado
-local y actualizar desde main. El parche no realiza commit, push ni despliegue.
-Probar localmente, registrar validación manual y revisar el diff; entonces commit,
-PR a main, CI y merge. Vercel desplegará el cambio de main según la integración
-configurada. El despliegue actual sigue sin modificaciones desde este entorno.
+## Fuentes y consecuencias
+
+[WAI disclosure](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) orienta la
+semántica; no es declaración de conformidad WCAG. Las elecciones visuales fueron
+validadas por producto, no por un benchmark de productividad. La apertura ahorra
+espacio a cambio de una acción adicional; se permiten varias filas abiertas.
+Sin cambios de permisos, dependencias o migraciones. [Decisiones](decisions.md).

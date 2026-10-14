@@ -1,5 +1,12 @@
 # Fotos y envío de Public Order
 
+> **Registro técnico de su checkpoint.** Las declaraciones de estado/pendientes
+> siguientes describen la fecha original, no necesariamente main actual.
+> Para estado integrado y procedimiento de arranque, ver [índice](README.md),
+> [arquitectura](architecture.md) y [desarrollo](development.md).
+> No repetir migraciones por seguir instrucciones históricas de aplicación.
+
+
 ## Aplicación
 
 1. Aplicar el parche y ejecutar `npm install`.

@@ -1,5 +1,12 @@
 # Resumen: lógica de filtros por mes y colaborador
 
+> **Registro técnico de su checkpoint.** Las declaraciones de estado/pendientes
+> siguientes describen la fecha original, no necesariamente main actual.
+> Para estado integrado y procedimiento de arranque, ver [índice](README.md),
+> [arquitectura](architecture.md) y [desarrollo](development.md).
+> No repetir migraciones por seguir instrucciones históricas de aplicación.
+
+
 Fecha: 2026-10-07. Estado: migración propuesta y pruebas SQL aprobadas localmente.
 No aplicada en Supabase. La web aún utiliza la consulta anterior sin filtros.
 
